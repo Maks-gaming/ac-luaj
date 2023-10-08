@@ -38,7 +38,7 @@ import org.luaj.vm2.luajc.LuaJC;
 /**
  * lua command for use in JSE environments.
  */
-public class lua {
+public class LuaStarter {
 	private static final String version = Lua._VERSION + " Copyright (c) 2012 Luaj.org.org";
 
 	private static final String usage = 
