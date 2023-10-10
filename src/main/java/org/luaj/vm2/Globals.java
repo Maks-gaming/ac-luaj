@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 
+import org.jetbrains.annotations.NotNull;
 import org.luaj.vm2.lib.BaseLib;
 import org.luaj.vm2.lib.DebugLib;
 import org.luaj.vm2.lib.IoLib;
@@ -330,7 +331,7 @@ public class Globals extends LuaTable {
 		public int read() throws IOException {
 			return i < n ? s.charAt(i++) : -1;
 		}
-		public int read(char[] cbuf, int off, int len) throws IOException {
+		public int read(char @NotNull [] cbuf, int off, int len) throws IOException {
 			int j = 0;
 			for (; j < len && i < n; ++j, ++i)
 				cbuf[off+j] = s.charAt(i);
@@ -352,10 +353,10 @@ public class Globals extends LuaTable {
 			int a = avail();
 			return (a <= 0 ? -1 : 0xff & b[i++]);
 		}
-		public int read(byte[] b) throws IOException {
+		public int read(byte @NotNull [] b) throws IOException {
 			return read(b, 0, b.length);
 		}
-		public int read(byte[] b, int i0, int n) throws IOException {
+		public int read(byte @NotNull [] b, int i0, int n) throws IOException {
 			int a = avail();
 			if (a <= 0) return -1;
 			final int n_read = Math.min(a, n);

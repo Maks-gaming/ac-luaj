@@ -192,8 +192,8 @@ public class LoadState {
 		int[] array = new int[n];
 		for ( int i=0, j=0; i<n; ++i, j+=4 )
 			array[i] = luacLittleEndian?
-					(buf[j+3] << 24) | ((0xff & buf[j+2]) << 16) | ((0xff & buf[j+1]) << 8) | (0xff & buf[j+0]):
-					(buf[j+0] << 24) | ((0xff & buf[j+1]) << 16) | ((0xff & buf[j+2]) << 8) | (0xff & buf[j+3]);
+					(buf[j+3] << 24) | ((0xff & buf[j+2]) << 16) | ((0xff & buf[j+1]) << 8) | (0xff & buf[j]):
+					(buf[j] << 24) | ((0xff & buf[j+1]) << 16) | ((0xff & buf[j+2]) << 8) | (0xff & buf[j+3]);
 
 		return array;
 	}
@@ -272,24 +272,13 @@ public class LoadState {
 		int n = loadInt();
 		LuaValue[] values = n>0? new LuaValue[n]: NOVALUES;
 		for ( int i=0; i<n; i++ ) {
-			switch ( is.readByte() ) {
-			case LUA_TNIL:
-				values[i] = LuaValue.NIL;
-				break;
-			case LUA_TBOOLEAN:
-				values[i] = (0 != is.readUnsignedByte()? LuaValue.TRUE: LuaValue.FALSE);
-				break;
-			case LUA_TINT:
-				values[i] = LuaInteger.valueOf( loadInt() );
-				break;
-			case LUA_TNUMBER:
-				values[i] = loadNumber();
-				break;
-			case LUA_TSTRING:
-				values[i] = loadString();
-				break;
-			default:
-				throw new IllegalStateException("bad constant");
+			switch (is.readByte()) {
+				case LUA_TNIL -> values[i] = LuaValue.NIL;
+				case LUA_TBOOLEAN -> values[i] = (0 != is.readUnsignedByte() ? LuaValue.TRUE : LuaValue.FALSE);
+				case LUA_TINT -> values[i] = LuaInteger.valueOf(loadInt());
+				case LUA_TNUMBER -> values[i] = loadNumber();
+				case LUA_TSTRING -> values[i] = loadString();
+				default -> throw new IllegalStateException("bad constant");
 			}
 		}
 		f.k = values;
@@ -342,10 +331,6 @@ public class LoadState {
 	 */
 	public Prototype loadFunction(LuaString p) throws IOException {
 		Prototype f = new Prototype();
-////		this.L.push(f);
-//		f.source = loadString();
-//		if ( f.source == null )
-//			f.source = p;
 		f.linedefined = loadInt();
 		f.lastlinedefined = loadInt();
 		f.numparams = is.readUnsignedByte();
@@ -358,10 +343,8 @@ public class LoadState {
 		
 		// TODO: add check here, for debugging purposes, I believe
 		// see ldebug.c
-//		 IF (!luaG_checkcode(f), "bad code");
-		
-//		 this.L.pop();
-		 return f;
+
+		return f;
 	}
 
 	/**

@@ -107,7 +107,7 @@ public final class Buffer {
 	 * Convert the buffer to a {@link LuaString}
 	 * @return the value as a {@link LuaString}
 	 */
-	public final LuaString tostring() {
+	public LuaString tostring() {
 		realloc( length, 0 );
 		return LuaString.valueOf( bytes, offset, length );
 	}
@@ -132,7 +132,7 @@ public final class Buffer {
 	 * Append a single byte to the buffer.
 	 * @return {@code this} to allow call chaining
 	 */
-	public final Buffer append( byte b ) {
+	public Buffer append(byte b ) {
 		makeroom( 0, 1 );
 		bytes[ offset + length++ ] = b;
 		return this;
@@ -142,7 +142,7 @@ public final class Buffer {
 	 * Append a {@link LuaValue} to the buffer.
 	 * @return {@code this} to allow call chaining
 	 */
-	public final Buffer append( LuaValue val ) {
+	public Buffer append(LuaValue val ) {
 		append( val.strvalue() );
 		return this;
 	}
@@ -151,7 +151,7 @@ public final class Buffer {
 	 * Append a {@link LuaString} to the buffer.
 	 * @return {@code this} to allow call chaining
 	 */
-	public final Buffer append( LuaString str ) {
+	public Buffer append(LuaString str ) {
 		final int n = str.m_length;
 		makeroom( 0, n );
 		str.copyInto( 0, bytes, offset + length, n );
@@ -165,7 +165,7 @@ public final class Buffer {
 	 * @return {@code this} to allow call chaining
 	 * @see LuaString#encodeToUtf8(char[], int, byte[], int)
 	 */
-	public final Buffer append( String str ) {
+	public Buffer append(String str ) {
 		char[] c = str.toCharArray();
 		final int n = LuaString.lengthAsUtf8( c );
 		makeroom( 0, n );
@@ -218,7 +218,7 @@ public final class Buffer {
 	 * @param nbefore number of unused bytes which must precede the data after this completes 
 	 * @param nafter number of unused bytes which must follow the data after this completes 
 	 */
-	public final void makeroom( int nbefore, int nafter ) {
+	public void makeroom(int nbefore, int nafter ) {
 		if ( value != null ) {
 			LuaString s = value.strvalue();
 			value = null;
@@ -228,7 +228,7 @@ public final class Buffer {
 			System.arraycopy(s.m_bytes, s.m_offset, bytes, offset, length);
 		} else if ( offset+length+nafter > bytes.length || offset<nbefore ) {
 			int n = nbefore+length+nafter;
-			int m = n<32? 32: n<length*2? length*2: n;
+			int m = n<32? 32: Math.max(n, length * 2);
 			realloc( m, nbefore==0? 0: m-length-nafter );
 		}
 	}
@@ -237,7 +237,7 @@ public final class Buffer {
 	 * @param newSize the size of the buffer to use 
 	 * @param newOffset the offset to use 
 	 */
-	private final void realloc( int newSize, int newOffset ) {
+	private void realloc(int newSize, int newOffset ) {
 		if ( newSize != bytes.length ) {
 			byte[] newBytes = new byte[ newSize ];
 			System.arraycopy( bytes, offset, newBytes, newOffset, length );
