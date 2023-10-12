@@ -10,7 +10,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,30 +21,26 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
+import org.jetbrains.annotations.NotNull;
+import org.luaj.vm2.lib.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 
-import org.jetbrains.annotations.NotNull;
-import org.luaj.vm2.lib.BaseLib;
-import org.luaj.vm2.lib.DebugLib;
-import org.luaj.vm2.lib.IoLib;
-import org.luaj.vm2.lib.PackageLib;
-import org.luaj.vm2.lib.ResourceFinder;
-
 /**
  * Global environment used by luaj.  Contains global variables referenced by executing lua.
  * <p>
- * 
+ *
  * <h3>Constructing and Initializing Instances</h3>
- * Typically, this is constructed indirectly by a call to 
- * {@link org.luaj.vm2.lib.jse.JsePlatform#standardGlobals()} or 
- * {@link org.luaj.vm2.lib.jme.JmePlatform#standardGlobals()}, 
- * and then used to load lua scripts for execution as in the following example. 
+ * Typically, this is constructed indirectly by a call to
+ * {@link org.luaj.vm2.lib.jse.JsePlatform#standardGlobals()} or
+ * {@link org.luaj.vm2.lib.jme.JmePlatform#standardGlobals()},
+ * and then used to load lua scripts for execution as in the following example.
  * <pre> {@code
  * Globals globals = JsePlatform.standardGlobals();
- * globals.load( new StringReader("print 'hello'"), "main.lua" ).call(); 
+ * globals.load( new StringReader("print 'hello'"), "main.lua" ).call();
  * } </pre>
  * The creates a complete global environment with the standard libraries loaded.
  * <p>
@@ -52,16 +48,16 @@ import org.luaj.vm2.lib.ResourceFinder;
  * with only those libraries that are needed, for example.
  * <pre> {@code
  * Globals globals = new Globals();
- * globals.load( new BaseLib() ); 
+ * globals.load( new BaseLib() );
  * } </pre>
- * 
+ *
  * <h3>Loading and Executing Lua Code</h3>
- * Globals contains convenience functions to load and execute lua source code given a Reader. 
+ * Globals contains convenience functions to load and execute lua source code given a Reader.
  * A simple example is:
  * <pre> {@code
- * globals.load( new StringReader("print 'hello'"), "main.lua" ).call(); 
+ * globals.load( new StringReader("print 'hello'"), "main.lua" ).call();
  * } </pre>
- * 
+ *
  * <h3>Fine-Grained Control of Compiling and Loading Lua</h3>
  * Executable LuaFunctions are created from lua code in several steps
  * <ul>
@@ -76,7 +72,7 @@ import org.luaj.vm2.lib.ResourceFinder;
  * <li>compile lua to lua bytecode using {@link Compiler} or load precompiled code using {@link Undumper}
  * <li>convert lua bytecode to equivalent Java bytecode using {@link org.luaj.vm2.LuaJc.LuaJC} that implements {@link Loader} directly
  * </ul>
- * 
+ *
  * <h3>Java Field</h3>
  * Certain public fields are provided that contain the current values of important global state:
  * <ul>
@@ -88,21 +84,21 @@ import org.luaj.vm2.lib.ResourceFinder;
  * <li>{@link #undumper} Current loaded {@link Undumper}, if any.
  * <li>{@link #loader} Current loaded {@link Loader}, if any.
  * </ul>
- * 
+ *
  * <h3>Lua Environment Variables</h3>
- * When using {@link org.luaj.vm2.lib.jse.JsePlatform} or {@link org.luaj.vm2.lib.jme.JmePlatform}, 
+ * When using {@link org.luaj.vm2.lib.jse.JsePlatform} or {@link org.luaj.vm2.lib.jme.JmePlatform},
  * these environment variables are created within the Globals.
  * <ul>
  * <li>"_G" Pointer to this Globals.
  * <li>"_VERSION" String containing the version of luaj.
  * </ul>
- * 
+ *
  * <h3>Use in Multithreaded Environments</h3>
- * In a multi-threaded server environment, each server thread should create one Globals instance, 
- * which will be logically distinct and not interfere with each other, but share certain 
+ * In a multi-threaded server environment, each server thread should create one Globals instance,
+ * which will be logically distinct and not interfere with each other, but share certain
  * static immutable resources such as class data and string data.
  * <p>
- * 
+ *
  * @see org.luaj.vm2.lib.jse.JsePlatform
  * @see org.luaj.vm2.lib.jme.JmePlatform
  * @see LuaValue
@@ -126,16 +122,16 @@ public class Globals extends LuaTable {
 
 	/** The installed ResourceFinder for looking files by name. */
 	public ResourceFinder finder;
-	
+
 	/** The currently running thread.  Should not be changed by non-library code. */
 	public LuaThread running = new LuaThread(this);
 
 	/** The BaseLib instance loaded into this Globals */
 	public BaseLib baselib;
-	
+
 	/** The PackageLib instance loaded into this Globals */
 	public PackageLib package_;
-	
+
 	/** The DebugLib instance loaded into this Globals, or null if debugging is not enabled */
 	public DebugLib debuglib;
 
@@ -156,13 +152,13 @@ public class Globals extends LuaTable {
 		/** Load the supplied input stream into a prototype. */
 		Prototype undump(InputStream stream, String chunkname) throws IOException;
 	}
-	
+
 	/** Check that this object is a Globals object, and return it, otherwise throw an error. */
 	public Globals checkglobals() {
 		return this;
 	}
-	
-	/** The installed loader. 
+
+	/** The installed loader.
 	 * @see Loader */
 	public Loader loader;
 
@@ -196,7 +192,7 @@ public class Globals extends LuaTable {
 	public LuaValue load(String script, String chunkname) {
 		return load(new StrReader(script), chunkname);
 	}
-	
+
 	/** Convenience function to load a string value as a script.  Must be lua source.
 	 * @param script Contents of a lua script, such as "print 'hello, world.'"
 	 * @return LuaValue that may be executed via .call(), .invoke(), or .method() calls.
@@ -218,33 +214,33 @@ public class Globals extends LuaTable {
 		return load(new StrReader(script), chunkname, environment);
 	}
 
-	/** Load the content form a reader as a text file.  Must be lua source. 
-	 * The source is converted to UTF-8, so any characters appearing in quoted literals 
-	 * above the range 128 will be converted into multiple bytes.  
+	/** Load the content form a reader as a text file.  Must be lua source.
+	 * The source is converted to UTF-8, so any characters appearing in quoted literals
+	 * above the range 128 will be converted into multiple bytes.
 	 * @param reader Reader containing text of a lua script, such as "print 'hello, world.'"
 	 * @param chunkname Name that will be used within the chunk as the source.
 	 * @return LuaValue that may be executed via .call(), .invoke(), or .method() calls.
 	 * @throws LuaError if the script could not be compiled.
-	 */ 
+	 */
 	public LuaValue load(Reader reader, String chunkname) {
 		return load(new UTF8Stream(reader), chunkname, "t", this);
 	}
 
-	/** Load the content form a reader as a text file, supplying a custom environment.  
-	 * Must be lua source. The source is converted to UTF-8, so any characters 
+	/** Load the content form a reader as a text file, supplying a custom environment.
+	 * Must be lua source. The source is converted to UTF-8, so any characters
 	 * appearing in quoted literals above the range 128 will be converted into
-	 * multiple bytes. 
+	 * multiple bytes.
 	 * @param reader Reader containing text of a lua script, such as "print 'hello, world.'"
 	 * @param chunkname Name that will be used within the chunk as the source.
 	 * @param environment LuaTable to be used as the environment for the loaded function.
 	 * @return LuaValue that may be executed via .call(), .invoke(), or .method() calls.
 	 * @throws LuaError if the script could not be compiled.
-	 */ 
+	 */
 	public LuaValue load(Reader reader, String chunkname, LuaTable environment) {
 		return load(new UTF8Stream(reader), chunkname, "t", environment);
-	}	
+	}
 
-	/** Load the content form an input stream as a binary chunk or text file. 
+	/** Load the content form an input stream as a binary chunk or text file.
 	 * @param is InputStream containing a lua script or compiled lua"
 	 * @param chunkname Name that will be used within the chunk as the source.
 	 * @param mode String containing 'b' or 't' or both to control loading as binary or text or either.
@@ -261,9 +257,9 @@ public class Globals extends LuaTable {
 		}
 	}
 
-	/** Load lua source or lua binary from an input stream into a Prototype. 
-	 * The InputStream is either a binary lua chunk starting with the lua binary chunk signature, 
-	 * or a text input file.  If it is a text input file, it is interpreted as a UTF-8 byte sequence.  
+	/** Load lua source or lua binary from an input stream into a Prototype.
+	 * The InputStream is either a binary lua chunk starting with the lua binary chunk signature,
+	 * or a text input file.  If it is a text input file, it is interpreted as a UTF-8 byte sequence.
 	 * @param is Input stream containing a lua script or compiled lua"
 	 * @param chunkname Name that will be used within the chunk as the source.
 	 * @param mode String containing 'b' or 't' or both to control loading as binary or text or either.
@@ -286,18 +282,18 @@ public class Globals extends LuaTable {
 		error("Failed to load prototype "+chunkname+" using mode '"+mode+"'");
 		return null;
 	}
-	
-	/** Compile lua source from a Reader into a Prototype. The characters in the reader 
-	 * are converted to bytes using the UTF-8 encoding, so a string literal containing 
-	 * characters with codepoints 128 or above will be converted into multiple bytes. 
+
+	/** Compile lua source from a Reader into a Prototype. The characters in the reader
+	 * are converted to bytes using the UTF-8 encoding, so a string literal containing
+	 * characters with codepoints 128 or above will be converted into multiple bytes.
 	 */
 	public Prototype compilePrototype(Reader reader, String chunkname) throws IOException {
 		return compilePrototype(new UTF8Stream(reader), chunkname);
 	}
-	
-	/** Compile lua source from an InputStream into a Prototype. 
-	 * The input is assumed to be UTf-8, but since bytes in the range 128-255 are passed along as 
-	 * literal bytes, any ASCII-compatible encoding such as ISO 8859-1 may also be used.  
+
+	/** Compile lua source from an InputStream into a Prototype.
+	 * The input is assumed to be UTf-8, but since bytes in the range 128-255 are passed along as
+	 * literal bytes, any ASCII-compatible encoding such as ISO 8859-1 may also be used.
 	 */
 	public Prototype compilePrototype(InputStream stream, String chunkname) throws IOException {
 		if (compiler == null)
@@ -305,7 +301,7 @@ public class Globals extends LuaTable {
 		return compiler.compile(stream, chunkname);
 	}
 
-	/** Function which yields the current thread. 
+	/** Function which yields the current thread.
 	 * @param args  Arguments to supply as return values in the resume function of the resuming thread.
 	 * @return Values supplied as arguments to the resume() call that reactivates this thread.
 	 */
@@ -368,7 +364,7 @@ public class Globals extends LuaTable {
 			final long k = Math.min(n, j - i);
 			i += k;
 			return k;
-		}		
+		}
 		public int available() throws IOException {
 			return j - i;
 		}
@@ -404,9 +400,9 @@ public class Globals extends LuaTable {
 			r.close();
 		}
 	}
-	
+
 	/** Simple buffered InputStream that supports mark.
-	 * Used to examine an InputStream for a 4-byte binary lua signature, 
+	 * Used to examine an InputStream for a 4-byte binary lua signature,
 	 * and fall back to text input when the signature is not found,
 	 * as well as speed up normal compilation and reading of lua scripts.
 	 * This class may be moved to its own package in the future.
