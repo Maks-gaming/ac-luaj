@@ -24,20 +24,20 @@ abstract public class AbstractUnitTests extends TestCase {
     private Globals globals;
 
     public AbstractUnitTests(String zipdir, String zipfile, String dir) {
-    	URL zip = null;
-		zip = getClass().getResource(zipfile);
-		if ( zip == null ) {
-	    	File file = new File(zipdir+"/"+zipfile);
-			try {
-		    	if ( file.exists() )
-					zip = file.toURI().toURL();
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
-		}
-		if ( zip == null )
-			throw new RuntimeException("not found: "+zipfile);
-		this.jar = "jar:" + zip.toExternalForm()+ "!/";
+        URL zip = null;
+        zip = getClass().getResource(zipfile);
+        if (zip == null) {
+            File file = new File(zipdir + "/" + zipfile);
+            try {
+                if (file.exists())
+                    zip = file.toURI().toURL();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (zip == null)
+            throw new RuntimeException("not found: " + zipfile);
+        this.jar = "jar:" + zip.toExternalForm() + "!/";
         this.dir = dir;
     }
 
@@ -49,16 +49,16 @@ abstract public class AbstractUnitTests extends TestCase {
     protected String pathOfFile(String file) {
         return jar + dir + "/" + file;
     }
-    
+
     protected InputStream inputStreamOfPath(String path) throws IOException {
         URL url = new URL(path);
         return url.openStream();
     }
-    
+
     protected InputStream inputStreamOfFile(String file) throws IOException {
-    	return inputStreamOfPath(pathOfFile(file));
+        return inputStreamOfPath(pathOfFile(file));
     }
-    
+
     protected void doTest(String file) {
         try {
             // load source from jar
@@ -71,7 +71,7 @@ abstract public class AbstractUnitTests extends TestCase {
             String actual = protoToString(p);
 
             // load expected value from jar
-            byte[] luac = bytesFromJar(path.substring(0, path.length()-4)+".lc");
+            byte[] luac = bytesFromJar(path.substring(0, path.length() - 4) + ".lc");
             Prototype e = loadFromBytes(luac, file);
             String expected = protoToString(e);
 
@@ -107,7 +107,7 @@ abstract public class AbstractUnitTests extends TestCase {
     }
 
     protected Prototype loadFromBytes(byte[] bytes, String script)
-            throws IOException {
+        throws IOException {
         InputStream is = new ByteArrayInputStream(bytes);
         return globals.loadPrototype(is, script, "b");
     }

@@ -10,7 +10,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,17 +25,17 @@ import junit.framework.TestCase;
 
 import org.luaj.vm2.lib.jse.JsePlatform;
 
-public class UTF8StreamTest  extends TestCase {
+public class UTF8StreamTest extends TestCase {
 
-	public void testUtf8CharsInStream() {
-		String script = "x = \"98\u00b0: today's temp!\"\n"
-				+ "print('x = ', x)\n"
-				+ "return x";
-		Globals globals = JsePlatform.standardGlobals();
-		LuaValue chunk = globals.load(script);
-		LuaValue result = chunk.call();
-		String str = result.tojstring();
-		assertEquals("98\u00b0: today's temp!", str);
-	}
+    public void testUtf8CharsInStream() {
+        String script = "x = \"98\u00b0: today's temp!\"\n"
+            + "print('x = ', x)\n"
+            + "return x";
+        Globals globals = JsePlatform.standardGlobals();
+        LuaValue chunk = globals.load(script);
+        LuaValue result = chunk.call();
+        String str = result.tojstring();
+        assertEquals("98\u00b0: today's temp!", str);
+    }
 
 }

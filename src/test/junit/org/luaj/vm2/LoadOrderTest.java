@@ -10,7 +10,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -33,38 +33,38 @@ import org.luaj.vm2.server.LuajClassLoader;
 // Tests using class loading orders that have caused problems for some use cases.
 public class LoadOrderTest extends TestCase {
 
-	public void testLoadGlobalsFirst() {
-		Globals g = JsePlatform.standardGlobals();
-		assertNotNull(g);
-	}
+    public void testLoadGlobalsFirst() {
+        Globals g = JsePlatform.standardGlobals();
+        assertNotNull(g);
+    }
 
-	public void testLoadStringFirst() {
-		LuaString BAR = LuaString.valueOf("bar");
-		assertNotNull(BAR);
-	}
+    public void testLoadStringFirst() {
+        LuaString BAR = LuaString.valueOf("bar");
+        assertNotNull(BAR);
+    }
 
-	public static class TestLauncherLoadStringFirst implements Launcher {
-		// Static initializer that causes LuaString->LuaValue->LuaString
-		private static final LuaString FOO = LuaString.valueOf("foo");
+    public static class TestLauncherLoadStringFirst implements Launcher {
+        // Static initializer that causes LuaString->LuaValue->LuaString
+        private static final LuaString FOO = LuaString.valueOf("foo");
 
-		public Object[] launch(String script, Object[] arg) {
-			return new Object[] { FOO };
-		}
+        public Object[] launch(String script, Object[] arg) {
+            return new Object[] { FOO };
+        }
 
-		public Object[] launch(InputStream script, Object[] arg) {
-			return null;
-		}
+        public Object[] launch(InputStream script, Object[] arg) {
+            return null;
+        }
 
-		public Object[] launch(Reader script, Object[] arg) {
-			return null;
-		}
-	}
+        public Object[] launch(Reader script, Object[] arg) {
+            return null;
+        }
+    }
 
-	public void testClassLoadsStringFirst() throws Exception {
-		Launcher launcher = LuajClassLoader
-				.NewLauncher(TestLauncherLoadStringFirst.class);
-		Object[] results = launcher.launch("foo", null);
-		assertNotNull(results);
-	}
+    public void testClassLoadsStringFirst() throws Exception {
+        Launcher launcher = LuajClassLoader
+            .NewLauncher(TestLauncherLoadStringFirst.class);
+        Object[] results = launcher.launch("foo", null);
+        assertNotNull(results);
+    }
 
 }

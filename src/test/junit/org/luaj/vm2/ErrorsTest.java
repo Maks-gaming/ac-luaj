@@ -10,7 +10,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,37 +27,45 @@ import java.io.InputStream;
 
 /**
  * Test argument type check errors
- * 
- * Results are compared for exact match with 
- * the installed C-based lua environment. 
+ * <p>
+ * Results are compared for exact match with
+ * the installed C-based lua environment.
  */
 public class ErrorsTest extends ScriptDrivenTest {
 
-	private static final String dir = "errors/";
+    private static final String dir = "errors/";
 
-	public ErrorsTest() {
-		super(ScriptDrivenTest.PlatformType.JSE, dir);
-	}
-	
-	protected void setUp() throws Exception {
-		super.setUp();
-	}
+    public ErrorsTest() {
+        super(ScriptDrivenTest.PlatformType.JSE, dir);
+    }
 
-	public void testBaseLibArgs()       { 
-		globals.STDIN = new InputStream() {
-			public int read() throws IOException {
-				return -1;
-			}
-		};
-		runTest("baselibargs");      
-	}
-	public void testCoroutineLibArgs()  { runTest("coroutinelibargs"); }	
-	public void testDebugLibArgs()      { runTest("debuglibargs"); }	
-	public void testIoLibArgs()         { runTest("iolibargs");        }	
-	public void testMathLibArgs()       { runTest("mathlibargs");      }	
-	public void testModuleLibArgs()     { runTest("modulelibargs");    }	
-	public void testOperators()         { runTest("operators");        }
-	public void testStringLibArgs()     { runTest("stringlibargs");    }
-	public void testTableLibArgs()      { runTest("tablelibargs");     }
-	
+    protected void setUp() throws Exception {
+        super.setUp();
+    }
+
+    public void testBaseLibArgs() {
+        globals.STDIN = new InputStream() {
+            public int read() throws IOException {
+                return -1;
+            }
+        };
+        runTest("baselibargs");
+    }
+
+    public void testCoroutineLibArgs() {runTest("coroutinelibargs");}
+
+    public void testDebugLibArgs() {runTest("debuglibargs");}
+
+    public void testIoLibArgs() {runTest("iolibargs");}
+
+    public void testMathLibArgs() {runTest("mathlibargs");}
+
+    public void testModuleLibArgs() {runTest("modulelibargs");}
+
+    public void testOperators() {runTest("operators");}
+
+    public void testStringLibArgs() {runTest("stringlibargs");}
+
+    public void testTableLibArgs() {runTest("tablelibargs");}
+
 }

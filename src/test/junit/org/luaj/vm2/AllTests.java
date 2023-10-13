@@ -10,7 +10,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -41,69 +41,69 @@ import org.luaj.vm2.script.ScriptEngineTests;
 
 public class AllTests {
 
-	public static Test suite() {
-		TestSuite suite = new TestSuite("All Tests for Luaj-vm2");
+    public static Test suite() {
+        TestSuite suite = new TestSuite("All Tests for Luaj-vm2");
 
-		// vm tests
-		TestSuite vm = new TestSuite("VM Tests");
-		vm.addTestSuite(TypeTest.class);
-		vm.addTestSuite(UnaryBinaryOperatorsTest.class);
-		vm.addTestSuite(MetatableTest.class);
-		vm.addTestSuite(LuaOperationsTest.class);
-		vm.addTestSuite(StringTest.class);
-		vm.addTestSuite(OrphanedThreadTest.class);
-		vm.addTestSuite(VarargsTest.class);
-		vm.addTestSuite(LoadOrderTest.class);
-		suite.addTest(vm);
+        // vm tests
+        TestSuite vm = new TestSuite("VM Tests");
+        vm.addTestSuite(TypeTest.class);
+        vm.addTestSuite(UnaryBinaryOperatorsTest.class);
+        vm.addTestSuite(MetatableTest.class);
+        vm.addTestSuite(LuaOperationsTest.class);
+        vm.addTestSuite(StringTest.class);
+        vm.addTestSuite(OrphanedThreadTest.class);
+        vm.addTestSuite(VarargsTest.class);
+        vm.addTestSuite(LoadOrderTest.class);
+        suite.addTest(vm);
 
-		// table tests
-		TestSuite table = new TestSuite("Table Tests");
-		table.addTestSuite(TableTest.class);
-		table.addTestSuite(TableHashTest.class);
-		table.addTestSuite(WeakValueTableTest.class);
-		table.addTestSuite(WeakKeyTableTest.class);
-		table.addTestSuite(WeakKeyValueTableTest.class);
-		suite.addTest(table);
-		
-		// bytecode compilers regression tests
-		TestSuite bytecodetests = FragmentsTest.suite();
-		suite.addTest(bytecodetests);
-		
-		// I/O tests
-		TestSuite io = new TestSuite("I/O Tests");
-		io.addTestSuite(BufferedStreamTest.class);
-		io.addTestSuite(UTF8StreamTest.class);
-		suite.addTest(io);
-		
-		// prototype compiler
-		TestSuite compiler = new TestSuite("Lua Compiler Tests");
-		compiler.addTestSuite(CompilerUnitTests.class);
-		compiler.addTestSuite(DumpLoadEndianIntTest.class);
-		compiler.addTestSuite(LuaParserTests.class);
-		compiler.addTestSuite(RegressionTests.class);
-		compiler.addTestSuite(SimpleTests.class);
-		suite.addTest(compiler);
-		
-		// library tests
-		TestSuite lib = new TestSuite("Library Tests");
-		lib.addTestSuite(JsePlatformTest.class);
-		lib.addTestSuite(LuajavaAccessibleMembersTest.class);
-		lib.addTestSuite(LuajavaClassMembersTest.class);
-		lib.addTestSuite(LuaJavaCoercionTest.class);
-		lib.addTestSuite(RequireClassTest.class);
-		lib.addTestSuite(OsLibTest.class);
-		suite.addTest(lib);
+        // table tests
+        TestSuite table = new TestSuite("Table Tests");
+        table.addTestSuite(TableTest.class);
+        table.addTestSuite(TableHashTest.class);
+        table.addTestSuite(WeakValueTableTest.class);
+        table.addTestSuite(WeakKeyTableTest.class);
+        table.addTestSuite(WeakKeyValueTableTest.class);
+        suite.addTest(table);
 
-		// Script engine tests.
-		TestSuite script = ScriptEngineTests.suite();
-		suite.addTest(script);
-		
-		// compatiblity tests
-		TestSuite compat = CompatibiltyTest.suite();
-		suite.addTest(compat);
-		compat.addTestSuite(ErrorsTest.class);
-		
-		return suite;
-	}
+        // bytecode compilers regression tests
+        TestSuite bytecodetests = FragmentsTest.suite();
+        suite.addTest(bytecodetests);
+
+        // I/O tests
+        TestSuite io = new TestSuite("I/O Tests");
+        io.addTestSuite(BufferedStreamTest.class);
+        io.addTestSuite(UTF8StreamTest.class);
+        suite.addTest(io);
+
+        // prototype compiler
+        TestSuite compiler = new TestSuite("Lua Compiler Tests");
+        compiler.addTestSuite(CompilerUnitTests.class);
+        compiler.addTestSuite(DumpLoadEndianIntTest.class);
+        compiler.addTestSuite(LuaParserTests.class);
+        compiler.addTestSuite(RegressionTests.class);
+        compiler.addTestSuite(SimpleTests.class);
+        suite.addTest(compiler);
+
+        // library tests
+        TestSuite lib = new TestSuite("Library Tests");
+        lib.addTestSuite(JsePlatformTest.class);
+        lib.addTestSuite(LuajavaAccessibleMembersTest.class);
+        lib.addTestSuite(LuajavaClassMembersTest.class);
+        lib.addTestSuite(LuaJavaCoercionTest.class);
+        lib.addTestSuite(RequireClassTest.class);
+        lib.addTestSuite(OsLibTest.class);
+        suite.addTest(lib);
+
+        // Script engine tests.
+        TestSuite script = ScriptEngineTests.suite();
+        suite.addTest(script);
+
+        // compatiblity tests
+        TestSuite compat = CompatibiltyTest.suite();
+        suite.addTest(compat);
+        compat.addTestSuite(ErrorsTest.class);
+
+        return suite;
+    }
 
 }

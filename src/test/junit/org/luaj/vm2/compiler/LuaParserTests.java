@@ -13,16 +13,16 @@ public class LuaParserTests extends CompilerUnitTests {
         super.setUp();
         LuaValue.valueOf(true);
     }
-	
-	protected void doTest(String file) {
-		try {
-			InputStream is = inputStreamOfFile(file);
-			Reader r = new InputStreamReader(is, "ISO-8859-1");
-			LuaParser parser = new LuaParser(r);
-			parser.Chunk();
-		} catch (Exception e) {
-			fail(e.getMessage());
-			e.printStackTrace();
-		}
-	}
+
+    protected void doTest(String file) {
+        try {
+            InputStream is = inputStreamOfFile(file);
+            Reader r = new InputStreamReader(is, "ISO-8859-1");
+            LuaParser parser = new LuaParser(r);
+            parser.Chunk();
+        } catch (Exception e) {
+            fail(e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }
