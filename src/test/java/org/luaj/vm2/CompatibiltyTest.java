@@ -111,6 +111,7 @@ public class CompatibiltyTest {
             super(ScriptDrivenTest.PlatformType.JSE);
         }
 
+        @BeforeEach
         protected void setUp() throws Exception {
             super.setUp();
             System.setProperty("JME", "false");
@@ -122,6 +123,7 @@ public class CompatibiltyTest {
             super(ScriptDrivenTest.PlatformType.LUAJIT);
         }
 
+        @BeforeEach
         protected void setUp() throws Exception {
             super.setUp();
             System.setProperty("JME", "false");

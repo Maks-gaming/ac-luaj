@@ -21,6 +21,7 @@
  ******************************************************************************/
 package org.luaj.vm2.script;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.luaj.vm2.LuaFunction;
 import org.luaj.vm2.LuaValue;
@@ -81,6 +82,7 @@ public class ScriptEngineTests {
     }
 
     public static class CompileClosureTest extends DefaultBindingsTest {
+        @BeforeEach
         protected void setUp() throws Exception {
             System.setProperty("org.luaj.luajc", "false");
             super.setUp();
@@ -95,6 +97,7 @@ public class ScriptEngineTests {
     }
 
     public static class CompileNonClosureTest extends DefaultBindingsTest {
+        @BeforeEach
         protected void setUp() throws Exception {
             System.setProperty("org.luaj.luajc", "true");
             super.setUp();
@@ -114,6 +117,7 @@ public class ScriptEngineTests {
 
         abstract protected Bindings createBindings();
 
+        @BeforeEach
         protected void setUp() throws Exception {
             this.e = new ScriptEngineManager().getEngineByName("luaj");
             this.b = createBindings();
@@ -277,6 +281,7 @@ public class ScriptEngineTests {
         protected Bindings b;
         protected ScriptContext c;
 
+        @BeforeEach
         public void setUp() {
             this.e = new ScriptEngineManager().getEngineByName("luaj");
             this.c = new LuajContext();
@@ -316,6 +321,7 @@ public class ScriptEngineTests {
         protected ScriptEngine e;
         protected Bindings b;
 
+        @BeforeEach
         public void setUp() {
             this.e = new ScriptEngineManager().getEngineByName("luaj");
             this.b = e.getBindings(ScriptContext.ENGINE_SCOPE);

@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 public class RegressionTests extends AbstractUnitTests {
 
     public RegressionTests() {
-        super("test/lua", "luaj3.0-tests.zip", "regressions");
+        super("src/test/lua", "luaj3.0-tests.zip", "regressions");
     }
 
     @Test

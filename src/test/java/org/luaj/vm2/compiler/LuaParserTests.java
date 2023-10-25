@@ -1,5 +1,6 @@
 package org.luaj.vm2.compiler;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.parser.LuaParser;
 
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 public class LuaParserTests extends CompilerUnitTests {
 
+    @BeforeEach
     protected void setUp() throws Exception {
         super.setUp();
         LuaValue.valueOf(true);
