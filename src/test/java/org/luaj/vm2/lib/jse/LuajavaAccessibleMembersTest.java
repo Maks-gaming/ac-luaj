@@ -1,16 +1,19 @@
 package org.luaj.vm2.lib.jse;
 
-import junit.framework.TestCase;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 
-public class LuajavaAccessibleMembersTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+public class LuajavaAccessibleMembersTest {
 
     private Globals globals;
 
+    @BeforeEach
     protected void setUp() throws Exception {
-        super.setUp();
         globals = JsePlatform.standardGlobals();
     }
 
@@ -24,6 +27,7 @@ public class LuajavaAccessibleMembersTest extends TestCase {
         }
     }
 
+    @Test
     public void testAccessFromPrivateClassImplementedMethod() {
         assertEquals("privateImpl-aaa-interface_method(bar)", invokeScript(
             "b = luajava.newInstance('" + TestClass.class.getName() + "');" +
@@ -31,6 +35,7 @@ public class LuajavaAccessibleMembersTest extends TestCase {
                 "return a:interface_method('bar');"));
     }
 
+    @Test
     public void testAccessFromPrivateClassPublicMethod() {
         assertEquals("privateImpl-aaa-public_method", invokeScript(
             "b = luajava.newInstance('" + TestClass.class.getName() + "');" +
@@ -38,6 +43,7 @@ public class LuajavaAccessibleMembersTest extends TestCase {
                 "return a:public_method();"));
     }
 
+    @Test
     public void testAccessFromPrivateClassGetPublicField() {
         assertEquals("aaa", invokeScript(
             "b = luajava.newInstance('" + TestClass.class.getName() + "');" +
@@ -45,6 +51,7 @@ public class LuajavaAccessibleMembersTest extends TestCase {
                 "return a.public_field;"));
     }
 
+    @Test
     public void testAccessFromPrivateClassSetPublicField() {
         assertEquals("foo", invokeScript(
             "b = luajava.newInstance('" + TestClass.class.getName() + "');" +
@@ -53,6 +60,7 @@ public class LuajavaAccessibleMembersTest extends TestCase {
                 "return a.public_field;"));
     }
 
+    @Test
     public void testAccessFromPrivateClassPublicConstructor() {
         assertEquals("privateImpl-constructor", invokeScript(
             "b = luajava.newInstance('" + TestClass.class.getName() + "');" +
@@ -60,6 +68,7 @@ public class LuajavaAccessibleMembersTest extends TestCase {
                 "return luajava.new(c);"));
     }
 
+    @Test
     public void testAccessPublicEnum() {
         assertEquals("class org.luaj.vm2.lib.jse.TestClass$SomeEnum", invokeScript(
             "b = luajava.newInstance('" + TestClass.class.getName() + "');" +

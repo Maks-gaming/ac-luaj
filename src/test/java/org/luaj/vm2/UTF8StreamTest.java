@@ -21,12 +21,14 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
-import junit.framework.TestCase;
-
+import org.junit.jupiter.api.Test;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
-public class UTF8StreamTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+public class UTF8StreamTest {
+
+    @Test
     public void testUtf8CharsInStream() {
         String script = "x = \"98\u00b0: today's temp!\"\n"
             + "print('x = ', x)\n"

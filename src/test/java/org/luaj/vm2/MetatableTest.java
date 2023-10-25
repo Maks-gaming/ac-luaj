@@ -21,15 +21,18 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
-import junit.framework.TestCase;
-
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.luaj.vm2.TypeTest.MyData;
 import org.luaj.vm2.lib.StringLib;
 import org.luaj.vm2.lib.ThreeArgFunction;
 import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.ZeroArgFunction;
 
-public class MetatableTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class MetatableTest {
 
     private final String samplestring = "abcdef";
     private final Object sampleobject = new Object();
@@ -45,13 +48,14 @@ public class MetatableTest extends TestCase {
     private final LuaUserdata userdata = LuaValue.userdataOf(sampleobject);
     private final LuaUserdata userdatamt = LuaValue.userdataOf(sampledata, table);
 
+    @BeforeEach
     protected void setUp() throws Exception {
         // needed for metatable ops to work on strings
         new StringLib();
     }
 
+    @AfterEach
     protected void tearDown() throws Exception {
-        super.tearDown();
         LuaBoolean.s_metatable = null;
         LuaFunction.s_metatable = null;
         LuaNil.s_metatable = null;
@@ -60,6 +64,7 @@ public class MetatableTest extends TestCase {
         LuaThread.s_metatable = null;
     }
 
+    @Test
     public void testGetMetatable() {
         assertEquals(null, LuaValue.NIL.getmetatable());
         assertEquals(null, LuaValue.TRUE.getmetatable());
@@ -73,6 +78,7 @@ public class MetatableTest extends TestCase {
         assertEquals(table, userdatamt.getmetatable());
     }
 
+    @Test
     public void testSetMetatable() {
         LuaValue mt = LuaValue.tableOf();
         assertEquals(null, table.getmetatable());
@@ -127,6 +133,7 @@ public class MetatableTest extends TestCase {
         assertEquals(mt, thread.getmetatable());
     }
 
+    @Test
     public void testMetatableIndex() {
         assertEquals(table, table.setmetatable(null));
         assertEquals(userdata, userdata.setmetatable(null));
@@ -184,6 +191,7 @@ public class MetatableTest extends TestCase {
     }
 
 
+    @Test
     public void testMetatableNewIndex() {
         // empty metatable
         LuaValue mt = LuaValue.tableOf();
@@ -271,6 +279,7 @@ public class MetatableTest extends TestCase {
         });
     }
 
+    @Test
     public void testRawsetMetatableSet() {
         // set up tables
         LuaValue m = makeTable("aa", "aaa", "bb", "bbb");

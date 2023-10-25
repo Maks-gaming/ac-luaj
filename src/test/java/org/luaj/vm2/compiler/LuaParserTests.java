@@ -1,11 +1,13 @@
 package org.luaj.vm2.compiler;
 
+import org.luaj.vm2.LuaValue;
+import org.luaj.vm2.parser.LuaParser;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.parser.LuaParser;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class LuaParserTests extends CompilerUnitTests {
 

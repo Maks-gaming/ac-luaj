@@ -1,26 +1,17 @@
 package org.luaj.vm2.compiler;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
-
-import junit.framework.TestCase;
-
-import org.luaj.vm2.Globals;
-import org.luaj.vm2.LoadState;
-import org.luaj.vm2.LuaClosure;
-import org.luaj.vm2.LuaFunction;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Prototype;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.luaj.vm2.*;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
+import java.io.*;
 
-public class DumpLoadEndianIntTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+
+public class DumpLoadEndianIntTest {
     private static final String SAVECHUNKS = "SAVECHUNKS";
 
     private static final boolean SHOULDPASS = true;
@@ -32,22 +23,25 @@ public class DumpLoadEndianIntTest extends TestCase {
 
     private Globals globals;
 
+    @BeforeEach
     protected void setUp() throws Exception {
-        super.setUp();
         globals = JsePlatform.standardGlobals();
         DumpState.ALLOW_INTEGER_CASTING = false;
     }
 
+    @Test
     public void testBigDoubleCompile() {
         doTest(false, DumpState.NUMBER_FORMAT_FLOATS_OR_DOUBLES, false, mixedscript, withdoubles, withdoubles, SHOULDPASS);
         doTest(false, DumpState.NUMBER_FORMAT_FLOATS_OR_DOUBLES, true, mixedscript, withdoubles, withdoubles, SHOULDPASS);
     }
 
+    @Test
     public void testLittleDoubleCompile() {
         doTest(true, DumpState.NUMBER_FORMAT_FLOATS_OR_DOUBLES, false, mixedscript, withdoubles, withdoubles, SHOULDPASS);
         doTest(true, DumpState.NUMBER_FORMAT_FLOATS_OR_DOUBLES, true, mixedscript, withdoubles, withdoubles, SHOULDPASS);
     }
 
+    @Test
     public void testBigIntCompile() {
         DumpState.ALLOW_INTEGER_CASTING = true;
         doTest(false, DumpState.NUMBER_FORMAT_INTS_ONLY, false, mixedscript, withdoubles, withints, SHOULDPASS);
@@ -59,6 +53,7 @@ public class DumpLoadEndianIntTest extends TestCase {
         doTest(false, DumpState.NUMBER_FORMAT_INTS_ONLY, true, intscript, withints, withints, SHOULDPASS);
     }
 
+    @Test
     public void testLittleIntCompile() {
         DumpState.ALLOW_INTEGER_CASTING = true;
         doTest(true, DumpState.NUMBER_FORMAT_INTS_ONLY, false, mixedscript, withdoubles, withints, SHOULDPASS);
@@ -70,11 +65,13 @@ public class DumpLoadEndianIntTest extends TestCase {
         doTest(true, DumpState.NUMBER_FORMAT_INTS_ONLY, true, intscript, withints, withints, SHOULDPASS);
     }
 
+    @Test
     public void testBigNumpatchCompile() {
         doTest(false, DumpState.NUMBER_FORMAT_NUM_PATCH_INT32, false, mixedscript, withdoubles, withdoubles, SHOULDPASS);
         doTest(false, DumpState.NUMBER_FORMAT_NUM_PATCH_INT32, true, mixedscript, withdoubles, withdoubles, SHOULDPASS);
     }
 
+    @Test
     public void testLittleNumpatchCompile() {
         doTest(true, DumpState.NUMBER_FORMAT_NUM_PATCH_INT32, false, mixedscript, withdoubles, withdoubles, SHOULDPASS);
         doTest(true, DumpState.NUMBER_FORMAT_NUM_PATCH_INT32, true, mixedscript, withdoubles, withdoubles, SHOULDPASS);

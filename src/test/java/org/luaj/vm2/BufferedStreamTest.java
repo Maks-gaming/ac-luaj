@@ -21,14 +21,15 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
-import java.io.ByteArrayInputStream;
-
-import junit.framework.TestCase;
-
+import org.junit.jupiter.api.Test;
 import org.luaj.vm2.Globals.BufferedStream;
 
+import java.io.ByteArrayInputStream;
 
-public class BufferedStreamTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+
+public class BufferedStreamTest {
 
     public BufferedStreamTest() {}
 
@@ -36,10 +37,7 @@ public class BufferedStreamTest extends TestCase {
         return new BufferedStream(buflen, new ByteArrayInputStream(contents.getBytes()));
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public void testReadEmptyStream() throws java.io.IOException {
         BufferedStream bs = NewBufferedStream(4, "");
         assertEquals(-1, bs.read());
@@ -47,6 +45,7 @@ public class BufferedStreamTest extends TestCase {
         assertEquals(-1, bs.read(new byte[10], 0, 10));
     }
 
+    @Test
     public void testReadByte() throws java.io.IOException {
         BufferedStream bs = NewBufferedStream(2, "abc");
         assertEquals('a', bs.read());
@@ -55,6 +54,7 @@ public class BufferedStreamTest extends TestCase {
         assertEquals(-1, bs.read());
     }
 
+    @Test
     public void testReadByteArray() throws java.io.IOException {
         byte[] array = new byte[3];
         BufferedStream bs = NewBufferedStream(4, "abcdef");
@@ -67,6 +67,7 @@ public class BufferedStreamTest extends TestCase {
         assertEquals(-1, bs.read());
     }
 
+    @Test
     public void testReadByteArrayOffsetLength() throws java.io.IOException {
         byte[] array = new byte[10];
         BufferedStream bs = NewBufferedStream(8, "abcdefghijklmn");
@@ -79,6 +80,7 @@ public class BufferedStreamTest extends TestCase {
         assertEquals(-1, bs.read());
     }
 
+    @Test
     public void testMarkOffsetBeginningOfStream() throws java.io.IOException {
         byte[] array = new byte[4];
         BufferedStream bs = NewBufferedStream(8, "abcdefghijkl");
@@ -96,6 +98,7 @@ public class BufferedStreamTest extends TestCase {
         assertEquals(-1, bs.read());
     }
 
+    @Test
     public void testMarkOffsetMiddleOfStream() throws java.io.IOException {
         byte[] array = new byte[4];
         BufferedStream bs = NewBufferedStream(8, "abcdefghijkl");

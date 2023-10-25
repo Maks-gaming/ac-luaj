@@ -21,7 +21,7 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 import org.luaj.vm2.TypeTest.MyData;
 import org.luaj.vm2.lib.ZeroArgFunction;
 
@@ -29,7 +29,10 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 
-public class LuaOperationsTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+public class LuaOperationsTest {
 
     private final int sampleint = 77;
     private final long samplelong = 123400000000L;
@@ -88,6 +91,7 @@ public class LuaOperationsTest extends TestCase {
         }
     }
 
+    @Test
     public void testLen() {
         throwsLuaError("len", somenil);
         throwsLuaError("len", sometrue);
@@ -108,6 +112,7 @@ public class LuaOperationsTest extends TestCase {
         throwsLuaError("len", userdatacls);
     }
 
+    @Test
     public void testLength() {
         throwsLuaError("length", somenil);
         throwsLuaError("length", sometrue);
@@ -141,6 +146,7 @@ public class LuaOperationsTest extends TestCase {
         }
     }
 
+    @Test
     public void testFunctionClosureThreadEnv() {
 
         // set up suitable environments for execution

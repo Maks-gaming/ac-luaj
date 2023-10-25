@@ -21,12 +21,15 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Tests of basic unary and binary operators on main value types.
  */
-public class VarargsTest extends TestCase {
+public class VarargsTest {
 
     static LuaValue A = LuaValue.valueOf("a");
     static LuaValue B = LuaValue.valueOf("b");
@@ -68,6 +71,7 @@ public class VarargsTest extends TestCase {
             assertEquals(x.arg(i), y.arg(i));
     }
 
+    @Test
     public void testSanity() {
         expectEquals(A_G, A_G);
         expectEquals(A_G_alt, A_G_alt);
@@ -86,6 +90,7 @@ public class VarargsTest extends TestCase {
         expectEquals(NIL, NIL);
     }
 
+    @Test
     public void testNegativeIndices() {
         expectNegSubargsError(A_G);
         expectNegSubargsError(A_G_alt);
@@ -158,6 +163,7 @@ public class VarargsTest extends TestCase {
         expectEquals(NONE, none.subargs(2));
     }
 
+    @Test
     public void testVarargsSubargs() {
         standardTestsA_G(A_G);
         standardTestsA_G(A_G_alt);
@@ -170,6 +176,7 @@ public class VarargsTest extends TestCase {
         standardTestsNone(NONE);
     }
 
+    @Test
     public void testVarargsMore() {
         Varargs a_g;
         a_g = LuaValue.varargsOf(new LuaValue[] { A, }, LuaValue.varargsOf(new LuaValue[] { B, C, D, E, F, G }));
@@ -186,6 +193,7 @@ public class VarargsTest extends TestCase {
         standardTestsA_G(a_g);
     }
 
+    @Test
     public void testPairVarargsMore() {
         Varargs a_g = new Varargs.PairVarargs(A,
             new Varargs.PairVarargs(B,
@@ -196,6 +204,7 @@ public class VarargsTest extends TestCase {
         standardTestsA_G(a_g);
     }
 
+    @Test
     public void testArrayPartMore() {
         Varargs a_g;
         a_g = new Varargs.ArrayPartVarargs(Z_H_array, 1, 1, new Varargs.ArrayPartVarargs(Z_H_array, 2, 6));

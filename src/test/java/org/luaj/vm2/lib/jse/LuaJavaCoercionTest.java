@@ -1,16 +1,12 @@
 package org.luaj.vm2.lib.jse;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.luaj.vm2.*;
 
-import org.luaj.vm2.LuaError;
-import org.luaj.vm2.LuaInteger;
-import org.luaj.vm2.LuaString;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.Varargs;
-import org.luaj.vm2.lib.MathLib;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class LuaJavaCoercionTest extends TestCase {
+public class LuaJavaCoercionTest {
 
     private static LuaValue globals;
     private static LuaValue ZERO = LuaValue.ZERO;
@@ -19,11 +15,12 @@ public class LuaJavaCoercionTest extends TestCase {
     private static LuaValue THREE = LuaValue.valueOf(3);
     private static LuaString LENGTH = LuaString.valueOf("length");
 
+    @BeforeEach
     protected void setUp() throws Exception {
-        super.setUp();
         globals = JsePlatform.standardGlobals();
     }
 
+    @Test
     public void testJavaIntToLuaInt() {
         Integer i = Integer.valueOf(777);
         LuaValue v = CoerceJavaToLua.coerce(i);
@@ -31,6 +28,7 @@ public class LuaJavaCoercionTest extends TestCase {
         assertEquals(777, v.toint());
     }
 
+    @Test
     public void testLuaIntToJavaInt() {
         LuaInteger i = LuaInteger.valueOf(777);
         Object o = CoerceLuaToJava.coerce(i, int.class);
@@ -38,9 +36,10 @@ public class LuaJavaCoercionTest extends TestCase {
         assertEquals(777, ((Number) o).intValue());
         o = CoerceLuaToJava.coerce(i, Integer.class);
         assertEquals(Integer.class, o.getClass());
-        assertEquals(new Integer(777), o);
+        assertEquals((Integer) (777), o);
     }
 
+    @Test
     public void testJavaStringToLuaString() {
         String s = new String("777");
         LuaValue v = CoerceJavaToLua.coerce(s);
@@ -48,6 +47,7 @@ public class LuaJavaCoercionTest extends TestCase {
         assertEquals("777", v.toString());
     }
 
+    @Test
     public void testLuaStringToJavaString() {
         LuaString s = LuaValue.valueOf("777");
         Object o = CoerceLuaToJava.coerce(s, String.class);
@@ -55,6 +55,7 @@ public class LuaJavaCoercionTest extends TestCase {
         assertEquals("777", o);
     }
 
+    @Test
     public void testJavaClassToLuaUserdata() {
         LuaValue va = CoerceJavaToLua.coerce(ClassA.class);
         LuaValue va1 = CoerceJavaToLua.coerce(ClassA.class);
@@ -79,6 +80,7 @@ public class LuaJavaCoercionTest extends TestCase {
     static class ClassB {
     }
 
+    @Test
     public void testJavaIntArrayToLuaTable() {
         int[] i = { 222, 333 };
         LuaValue v = CoerceJavaToLua.coerce(i);
@@ -108,6 +110,7 @@ public class LuaJavaCoercionTest extends TestCase {
         }
     }
 
+    @Test
     public void testLuaTableToJavaIntArray() {
         LuaTable t = new LuaTable();
         t.set(1, LuaInteger.valueOf(222));
@@ -121,6 +124,7 @@ public class LuaJavaCoercionTest extends TestCase {
         assertEquals(333, i[1]);
     }
 
+    @Test
     public void testIntArrayScoringTables() {
         int a = 5;
         LuaValue la = LuaInteger.valueOf(a);
@@ -146,6 +150,7 @@ public class LuaJavaCoercionTest extends TestCase {
         assertTrue(scc < scb);
     }
 
+    @Test
     public void testIntArrayScoringUserdata() {
         int a = 5;
         int[] b = { 44, 66 };
@@ -181,19 +186,22 @@ public class LuaJavaCoercionTest extends TestCase {
         public String sample(int[][] a) {return "int-array-array-args " + a[0][0] + "," + a[0][1] + "," + a[1][0] + "," + a[1][1];}
     }
 
+    @Test
     public void testMatchVoidArgs() {
         LuaValue v = CoerceJavaToLua.coerce(new SampleClass());
         LuaValue result = v.method("sample");
         assertEquals("void-args", result.toString());
     }
 
+    @Test
     public void testMatchIntArgs() {
         LuaValue v = CoerceJavaToLua.coerce(new SampleClass());
-        LuaValue arg = CoerceJavaToLua.coerce(new Integer(123));
+        LuaValue arg = CoerceJavaToLua.coerce((Integer) (123));
         LuaValue result = v.method("sample", arg);
         assertEquals("int-args 123", result.toString());
     }
 
+    @Test
     public void testMatchIntArrayArgs() {
         LuaValue v = CoerceJavaToLua.coerce(new SampleClass());
         LuaValue arg = CoerceJavaToLua.coerce(new int[] { 345, 678 });
@@ -201,6 +209,7 @@ public class LuaJavaCoercionTest extends TestCase {
         assertEquals("int-array-args 345,678", result.toString());
     }
 
+    @Test
     public void testMatchIntArrayArrayArgs() {
         LuaValue v = CoerceJavaToLua.coerce(new SampleClass());
         LuaValue arg = CoerceJavaToLua.coerce(new int[][] { { 22, 33 }, { 44, 55 } });
@@ -220,6 +229,7 @@ public class LuaJavaCoercionTest extends TestCase {
         }
     }
 
+    @Test
     public void testExceptionMessage() {
         String script = "local c = luajava.bindClass( \"" + SomeClass.class.getName() + "\" )\n" +
             "return pcall( c.someMethod, c )";
@@ -228,9 +238,10 @@ public class LuaJavaCoercionTest extends TestCase {
         LuaValue message = vresult.arg(2);
         assertEquals(LuaValue.FALSE, status);
         int index = message.toString().indexOf("this is some message");
-        assertTrue("bad message: " + message, index >= 0);
+        assertTrue(index >= 0, "bad message: " + message);
     }
 
+    @Test
     public void testLuaErrorCause() {
         String script = "luajava.bindClass( \"" + SomeClass.class.getName() + "\"):someMethod()";
         LuaValue chunk = globals.get("load").call(LuaValue.valueOf(script));
@@ -249,6 +260,7 @@ public class LuaJavaCoercionTest extends TestCase {
         public String arrayargsMethod(String a, String[] v);
     }
 
+    @Test
     public void testVarArgsProxy() {
         String script = "return luajava.createProxy( \"" + VarArgsInterface.class.getName() + "\", \n" +
             "{\n" +
@@ -279,6 +291,7 @@ public class LuaJavaCoercionTest extends TestCase {
         assertEquals("foo-nil", v.arrayargsMethod("foo", null));
     }
 
+    @Test
     public void testBigNum() {
         String script =
             "bigNumA = luajava.newInstance('java.math.BigDecimal','12345678901234567890');\n" +
@@ -393,28 +406,40 @@ public class LuaJavaCoercionTest extends TestCase {
     public static class D extends C implements IA {
     }
 
+    @Test
     public void testOverloadedJavaMethodObject() {doOverloadedMethodTest("Object", "");}
 
+    @Test
     public void testOverloadedJavaMethodString() {doOverloadedMethodTest("String", "abc");}
 
+    @Test
     public void testOverloadedJavaMethodA() {doOverloadedMethodTest("A", "");}
 
+    @Test
     public void testOverloadedJavaMethodB() {doOverloadedMethodTest("B", "");}
 
+    @Test
     public void testOverloadedJavaMethodC() {doOverloadedMethodTest("C", "");}
 
+    @Test
     public void testOverloadedJavaMethodByte() {doOverloadedMethodTest("byte", "1");}
 
+    @Test
     public void testOverloadedJavaMethodChar() {doOverloadedMethodTest("char", "65000");}
 
+    @Test
     public void testOverloadedJavaMethodShort() {doOverloadedMethodTest("short", "-32000");}
 
+    @Test
     public void testOverloadedJavaMethodInt() {doOverloadedMethodTest("int", "100000");}
 
+    @Test
     public void testOverloadedJavaMethodLong() {doOverloadedMethodTest("long", "50000000000");}
 
+    @Test
     public void testOverloadedJavaMethodFloat() {doOverloadedMethodTest("float", "6.5");}
 
+    @Test
     public void testOverloadedJavaMethodDouble() {doOverloadedMethodTest("double", "3.141592653589793");}
 
     private void doOverloadedMethodTest(String typename, String value) {
@@ -437,6 +462,7 @@ public class LuaJavaCoercionTest extends TestCase {
         assertEquals("setr(" + typename + ") " + value, sc);
     }
 
+    @Test
     public void testClassInheritanceLevels() {
         assertEquals(0, CoerceLuaToJava.inheritanceLevels(Object.class, Object.class));
         assertEquals(1, CoerceLuaToJava.inheritanceLevels(Object.class, String.class));
@@ -463,6 +489,7 @@ public class LuaJavaCoercionTest extends TestCase {
         assertEquals(0, CoerceLuaToJava.inheritanceLevels(C.class, C.class));
     }
 
+    @Test
     public void testInterfaceInheritanceLevels() {
         assertEquals(1, CoerceLuaToJava.inheritanceLevels(IA.class, A.class));
         assertEquals(1, CoerceLuaToJava.inheritanceLevels(IB.class, B.class));
@@ -481,6 +508,7 @@ public class LuaJavaCoercionTest extends TestCase {
         assertEquals(1, CoerceLuaToJava.inheritanceLevels(IA.class, IB.class));
     }
 
+    @Test
     public void testCoerceJavaToLuaLuaValue() {
         assertSame(LuaValue.NIL, CoerceJavaToLua.coerce(LuaValue.NIL));
         assertSame(LuaValue.ZERO, CoerceJavaToLua.coerce(LuaValue.ZERO));
@@ -490,6 +518,7 @@ public class LuaJavaCoercionTest extends TestCase {
         assertSame(table, CoerceJavaToLua.coerce(table));
     }
 
+    @Test
     public void testCoerceJavaToLuaByeArray() {
         byte[] bytes = "abcd".getBytes();
         LuaValue value = CoerceJavaToLua.coerce(bytes);

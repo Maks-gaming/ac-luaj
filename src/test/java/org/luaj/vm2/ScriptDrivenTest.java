@@ -21,7 +21,7 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
 import org.luaj.vm2.lib.ResourceFinder;
 import org.luaj.vm2.lib.jse.JseProcess;
 import org.luaj.vm2.luajc.LuaJC;
@@ -30,8 +30,11 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 abstract
-public class ScriptDrivenTest extends TestCase implements ResourceFinder {
+public class ScriptDrivenTest implements ResourceFinder {
     public static final boolean nocompile = "true".equals(System.getProperty("nocompile"));
 
     public enum PlatformType {
@@ -62,8 +65,8 @@ public class ScriptDrivenTest extends TestCase implements ResourceFinder {
     }
 
 
+    @BeforeEach
     protected void setUp() throws Exception {
-        super.setUp();
         initGlobals();
         globals.finder = this;
     }

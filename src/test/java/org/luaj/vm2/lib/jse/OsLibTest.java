@@ -1,14 +1,17 @@
 package org.luaj.vm2.lib.jse;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.luaj.vm2.LuaValue;
-import org.luaj.vm2.lib.OsLib;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
-public class OsLibTest extends TestCase {
+public class OsLibTest {
     LuaValue jse_lib;
     double time;
 
+    @BeforeEach
     public void setUp() {
         jse_lib = JsePlatform.standardGlobals().get("os");
         ;
@@ -17,6 +20,7 @@ public class OsLibTest extends TestCase {
 
     static final double DAY = 24. * 3600.;
 
+    @Test
     public void testJseOsGetenvForEnvVariables() {
         LuaValue USER = LuaValue.valueOf("USER");
         LuaValue jse_user = jse_lib.get("getenv").call(USER);
@@ -24,6 +28,7 @@ public class OsLibTest extends TestCase {
         System.out.println("User: " + jse_user);
     }
 
+    @Test
     public void testJseOsGetenvForSystemProperties() {
         System.setProperty("test.key.foo", "test.value.bar");
         LuaValue key = LuaValue.valueOf("test.key.foo");

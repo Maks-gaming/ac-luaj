@@ -21,15 +21,17 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
-import java.lang.ref.WeakReference;
-
-import junit.framework.TestCase;
-
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.luaj.vm2.lib.OneArgFunction;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
+import java.lang.ref.WeakReference;
 
-public class OrphanedThreadTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.*;
+
+public class OrphanedThreadTest {
 
     Globals globals;
     LuaThread luathread;
@@ -37,30 +39,36 @@ public class OrphanedThreadTest extends TestCase {
     LuaValue function;
     WeakReference func_ref;
 
+    @BeforeEach
     protected void setUp() throws Exception {
         LuaThread.thread_orphan_check_interval = 5;
         globals = JsePlatform.standardGlobals();
     }
 
+    @AfterEach
     protected void tearDown() {
         LuaThread.thread_orphan_check_interval = 30000;
     }
 
+    @Test
     public void testCollectOrphanedNormalThread() throws Exception {
         function = new NormalFunction(globals);
         doTest(LuaValue.TRUE, LuaValue.ZERO);
     }
 
+    @Test
     public void testCollectOrphanedEarlyCompletionThread() throws Exception {
         function = new EarlyCompletionFunction(globals);
         doTest(LuaValue.TRUE, LuaValue.ZERO);
     }
 
+    @Test
     public void testCollectOrphanedAbnormalThread() throws Exception {
         function = new AbnormalFunction(globals);
         doTest(LuaValue.FALSE, LuaValue.valueOf("abnormal condition"));
     }
 
+    @Test
     public void testCollectOrphanedClosureThread() throws Exception {
         String script =
             "print('in closure, arg is '..(...))\n" +
@@ -73,6 +81,7 @@ public class OrphanedThreadTest extends TestCase {
         doTest(LuaValue.TRUE, LuaValue.ZERO);
     }
 
+    @Test
     public void testCollectOrphanedPcallClosureThread() throws Exception {
         String script =
             "f = function(x)\n" +
@@ -88,6 +97,7 @@ public class OrphanedThreadTest extends TestCase {
         doTest(LuaValue.TRUE, LuaValue.ZERO);
     }
 
+    @Test
     public void testCollectOrphanedLoadCloasureThread() throws Exception {
         String script =
             "t = { \"print \", \"'hello, \", \"world'\", }\n" +

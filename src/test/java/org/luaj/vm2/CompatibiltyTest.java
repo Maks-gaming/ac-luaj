@@ -21,8 +21,9 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
-import junit.framework.TestSuite;
-
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.luaj.vm2.luajc.LuaJC;
 
 /**
@@ -31,7 +32,7 @@ import org.luaj.vm2.luajc.LuaJC;
  * Results are compared for exact match with
  * the installed C-based lua environment.
  */
-public class CompatibiltyTest extends TestSuite {
+public class CompatibiltyTest {
 
     private static final String dir = "";
 
@@ -42,13 +43,14 @@ public class CompatibiltyTest extends TestSuite {
             super(platform, dir);
         }
 
+        @BeforeEach
         protected void setUp() throws Exception {
             savedStringMetatable = LuaString.s_metatable;
             super.setUp();
         }
 
+        @AfterEach
         protected void tearDown() throws Exception {
-            super.tearDown();
             LuaNil.s_metatable = null;
             LuaBoolean.s_metatable = null;
             LuaNumber.s_metatable = null;
@@ -57,44 +59,52 @@ public class CompatibiltyTest extends TestSuite {
             LuaString.s_metatable = savedStringMetatable;
         }
 
+        @Test
         public void testBaseLib() {runTest("baselib");}
 
+        @Test
         public void testCoroutineLib() {runTest("coroutinelib");}
 
+        @Test
         public void testDebugLib() {runTest("debuglib");}
 
+        @Test
         public void testErrors() {runTest("errors");}
 
+        @Test
         public void testFunctions() {runTest("functions");}
 
+        @Test
         public void testIoLib() {runTest("iolib");}
 
+        @Test
         public void testManyUpvals() {runTest("manyupvals");}
 
+        @Test
         public void testMathLib() {runTest("mathlib");}
 
+        @Test
         public void testMetatags() {runTest("metatags");}
 
+        @Test
         public void testOsLib() {runTest("oslib");}
 
+        @Test
         public void testStringLib() {runTest("stringlib");}
 
+        @Test
         public void testTableLib() {runTest("tablelib");}
 
+        @Test
         public void testTailcalls() {runTest("tailcalls");}
 
+        @Test
         public void testUpvalues() {runTest("upvalues");}
 
+        @Test
         public void testVm() {runTest("vm");}
     }
 
-
-    public static TestSuite suite() {
-        TestSuite suite = new TestSuite("Compatibility Tests");
-        suite.addTest(new TestSuite(JseCompatibilityTest.class, "JSE Compatibility Tests"));
-        suite.addTest(new TestSuite(LuaJCCompatibilityTest.class, "LuaJC Compatibility Tests"));
-        return suite;
-    }
 
     public static class JseCompatibilityTest extends CompatibiltyTestSuite {
         public JseCompatibilityTest() {
@@ -119,6 +129,7 @@ public class CompatibiltyTest extends TestSuite {
         }
 
         // not supported on this platform - don't test
+        @Test
         public void testDebugLib() {}
     }
 }

@@ -1,5 +1,7 @@
 package org.luaj.vm2.compiler;
 
+import org.junit.jupiter.api.Test;
+
 /**
  * Framework to add regression tests as problem areas are found.
  * <p>
@@ -20,17 +22,24 @@ public class RegressionTests extends AbstractUnitTests {
         super("test/lua", "luaj3.0-tests.zip", "regressions");
     }
 
+    @Test
     public void testModulo() {doTest("modulo.lua");}
 
+    @Test
     public void testConstruct() {doTest("construct.lua");}
 
+    @Test
     public void testBigAttrs() {doTest("bigattr.lua");}
 
+    @Test
     public void testControlChars() {doTest("controlchars.lua");}
 
+    @Test
     public void testComparators() {doTest("comparators.lua");}
 
+    @Test
     public void testMathRandomseed() {doTest("mathrandomseed.lua");}
 
+    @Test
     public void testVarargs() {doTest("varargs.lua");}
 }

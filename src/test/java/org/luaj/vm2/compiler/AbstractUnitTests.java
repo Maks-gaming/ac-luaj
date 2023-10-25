@@ -1,23 +1,19 @@
 package org.luaj.vm2.compiler;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import junit.framework.TestCase;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.luaj.vm2.Globals;
-import org.luaj.vm2.LoadState;
 import org.luaj.vm2.Print;
 import org.luaj.vm2.Prototype;
 import org.luaj.vm2.lib.jse.JsePlatform;
 
-abstract public class AbstractUnitTests extends TestCase {
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+abstract public class AbstractUnitTests {
 
     private final String dir;
     private final String jar;
@@ -41,8 +37,8 @@ abstract public class AbstractUnitTests extends TestCase {
         this.dir = dir;
     }
 
+    @BeforeEach
     protected void setUp() throws Exception {
-        super.setUp();
         globals = JsePlatform.standardGlobals();
     }
 

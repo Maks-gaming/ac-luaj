@@ -21,7 +21,11 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
+import org.junit.jupiter.api.Test;
+
 import java.lang.ref.WeakReference;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 abstract public class WeakTableTest extends TableTest {
 
@@ -63,6 +67,7 @@ abstract public class WeakTableTest extends TableTest {
 
         protected LuaTable new_Table(int n, int m) {return WeakTable.make(false, true);}
 
+        @Test
         public void testWeakValuesTable() {
             LuaTable t = new_Table();
 
@@ -76,8 +81,8 @@ abstract public class WeakTableTest extends TableTest {
             t.set("string", stringValue);
             t.set("string2", LuaValue.valueOf("another string"));
             t.set(1, tableValue2);
-            assertTrue("table must have at least 4 elements", t.getHashLength() >= 4);
-            assertTrue("array part must have 1 element", t.getArrayLength() >= 1);
+            assertTrue(t.getHashLength() >= 4, "table must have at least 4 elements");
+            assertTrue(t.getArrayLength() >= 1, "array part must have 1 element");
 
             // check that table can be used to get elements
             assertEquals(tableValue, t.get("table"));
@@ -107,7 +112,7 @@ abstract public class WeakTableTest extends TableTest {
             assertEquals(LuaValue.NIL, t.get("table"));
             assertEquals(LuaValue.NIL, t.get("userdata"));
             assertEquals(LuaValue.NIL, t.get(1));
-            assertFalse("strings should not be in weak references", t.get("string").isnil());
+            assertFalse(t.get("string").isnil(), "strings should not be in weak references");
         }
     }
 
@@ -116,6 +121,7 @@ abstract public class WeakTableTest extends TableTest {
 
         protected LuaTable new_Table(int n, int m) {return WeakTable.make(true, false);}
 
+        @Test
         public void testWeakKeysTable() {
             LuaTable t = WeakTable.make(true, false);
 
@@ -149,6 +155,7 @@ abstract public class WeakTableTest extends TableTest {
             assertEquals(null, origval.get());
         }
 
+        @Test
         public void testNext() {
             LuaTable t = WeakTable.make(true, true);
 
@@ -184,6 +191,7 @@ abstract public class WeakTableTest extends TableTest {
 
         protected LuaTable new_Table(int n, int m) {return WeakTable.make(true, true);}
 
+        @Test
         public void testWeakKeysValuesTable() {
             LuaTable t = WeakTable.make(true, true);
 
@@ -237,6 +245,7 @@ abstract public class WeakTableTest extends TableTest {
             assertEquals(null, origkey3.get());
         }
 
+        @Test
         public void testReplace() {
             LuaTable t = WeakTable.make(true, true);
 

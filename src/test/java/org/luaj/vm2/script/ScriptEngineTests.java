@@ -21,60 +21,43 @@
  ******************************************************************************/
 package org.luaj.vm2.script;
 
-import java.io.CharArrayReader;
-import java.io.CharArrayWriter;
-import java.io.Reader;
-
-import javax.script.Bindings;
-import javax.script.Compilable;
-import javax.script.CompiledScript;
-import javax.script.ScriptContext;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
+import org.junit.jupiter.api.Test;
 import org.luaj.vm2.LuaFunction;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.OneArgFunction;
 
-public class ScriptEngineTests extends TestSuite {
+import javax.script.*;
+import java.io.CharArrayReader;
+import java.io.CharArrayWriter;
+import java.io.Reader;
 
-    public static TestSuite suite() {
-        TestSuite suite = new TestSuite("Script Engine Tests");
-        suite.addTest(new TestSuite(LookupEngineTestCase.class, "Lookup Engine"));
-        suite.addTest(new TestSuite(DefaultBindingsTest.class, "Default Bindings"));
-        suite.addTest(new TestSuite(SimpleBindingsTest.class, "Simple Bindings"));
-        suite.addTest(new TestSuite(CompileClosureTest.class, "Compile Closure"));
-        suite.addTest(new TestSuite(CompileNonClosureTest.class, "Compile NonClosure"));
-        suite.addTest(new TestSuite(UserContextTest.class, "User Context"));
-        suite.addTest(new TestSuite(WriterTest.class, "Writer"));
-        return suite;
-    }
+import static org.junit.jupiter.api.Assertions.*;
 
-    public static class LookupEngineTestCase extends TestCase {
+public class ScriptEngineTests {
+
+    public static class LookupEngineTestCase {
+        @Test
         public void testGetEngineByExtension() {
             ScriptEngine e = new ScriptEngineManager().getEngineByExtension(".lua");
             assertNotNull(e);
             assertEquals(LuaScriptEngine.class, e.getClass());
         }
 
+        @Test
         public void testGetEngineByName() {
             ScriptEngine e = new ScriptEngineManager().getEngineByName("luaj");
             assertNotNull(e);
             assertEquals(LuaScriptEngine.class, e.getClass());
         }
 
+        @Test
         public void testGetEngineByMimeType() {
             ScriptEngine e = new ScriptEngineManager().getEngineByMimeType("text/lua");
             assertNotNull(e);
             assertEquals(LuaScriptEngine.class, e.getClass());
         }
 
+        @Test
         public void testFactoryMetadata() {
             ScriptEngine e = new ScriptEngineManager().getEngineByName("luaj");
             ScriptEngineFactory f = e.getFactory();
@@ -103,6 +86,7 @@ public class ScriptEngineTests extends TestSuite {
             super.setUp();
         }
 
+        @Test
         public void testCompiledFunctionIsClosure() throws ScriptException {
             CompiledScript cs = ((Compilable) e).compile("return 'foo'");
             LuaValue value = ((LuaScriptEngine.LuajCompiledScript) cs).function;
@@ -116,6 +100,7 @@ public class ScriptEngineTests extends TestSuite {
             super.setUp();
         }
 
+        @Test
         public void testCompiledFunctionIsNotClosure() throws ScriptException {
             CompiledScript cs = ((Compilable) e).compile("return 'foo'");
             LuaValue value = ((LuaScriptEngine.LuajCompiledScript) cs).function;
@@ -123,7 +108,7 @@ public class ScriptEngineTests extends TestSuite {
         }
     }
 
-    abstract public static class EngineTestCase extends TestCase {
+    abstract public static class EngineTestCase {
         protected ScriptEngine e;
         protected Bindings b;
 
@@ -134,6 +119,7 @@ public class ScriptEngineTests extends TestSuite {
             this.b = createBindings();
         }
 
+        @Test
         public void testSqrtIntResult() throws ScriptException {
             e.put("x", 25);
             e.eval("y = math.sqrt(x)");
@@ -141,6 +127,7 @@ public class ScriptEngineTests extends TestSuite {
             assertEquals(5, y);
         }
 
+        @Test
         public void testOneArgFunction() throws ScriptException {
             e.put("x", 25);
             e.eval("y = math.sqrt(x)");
@@ -155,12 +142,14 @@ public class ScriptEngineTests extends TestSuite {
             assertEquals("abc123", r);
         }
 
+        @Test
         public void testCompiledScript() throws ScriptException {
             CompiledScript cs = ((Compilable) e).compile("y = math.sqrt(x); return y");
             b.put("x", 144);
             assertEquals(12, cs.eval(b));
         }
 
+        @Test
         public void testBuggyLuaScript() {
             try {
                 e.eval("\n\nbuggy lua code\n\n");
@@ -171,6 +160,7 @@ public class ScriptEngineTests extends TestSuite {
             fail("buggy script did not throw ScriptException as expected.");
         }
 
+        @Test
         public void testScriptRedirection() throws ScriptException {
             Reader input = new CharArrayReader("abcdefg\nhijk".toCharArray());
             CharArrayWriter output = new CharArrayWriter();
@@ -206,6 +196,7 @@ public class ScriptEngineTests extends TestSuite {
             assertEquals("", errors.toString());
         }
 
+        @Test
         public void testBindingJavaInt() throws ScriptException {
             CompiledScript cs = ((Compilable) e).compile("y = x; return 'x '..type(x)..' '..tostring(x)\n");
             b.put("x", 111);
@@ -213,6 +204,7 @@ public class ScriptEngineTests extends TestSuite {
             assertEquals(111, b.get("y"));
         }
 
+        @Test
         public void testBindingJavaDouble() throws ScriptException {
             CompiledScript cs = ((Compilable) e).compile("y = x; return 'x '..type(x)..' '..tostring(x)\n");
             b.put("x", 125.125);
@@ -220,6 +212,7 @@ public class ScriptEngineTests extends TestSuite {
             assertEquals(125.125, b.get("y"));
         }
 
+        @Test
         public void testBindingJavaString() throws ScriptException {
             CompiledScript cs = ((Compilable) e).compile("y = x; return 'x '..type(x)..' '..tostring(x)\n");
             b.put("x", "foo");
@@ -227,6 +220,7 @@ public class ScriptEngineTests extends TestSuite {
             assertEquals("foo", b.get("y"));
         }
 
+        @Test
         public void testBindingJavaObject() throws ScriptException {
             CompiledScript cs = ((Compilable) e).compile("y = x; return 'x '..type(x)..' '..tostring(x)\n");
             b.put("x", new SomeUserClass());
@@ -234,6 +228,7 @@ public class ScriptEngineTests extends TestSuite {
             assertEquals(SomeUserClass.class, b.get("y").getClass());
         }
 
+        @Test
         public void testBindingJavaArray() throws ScriptException {
             CompiledScript cs = ((Compilable) e).compile("y = x; return 'x '..type(x)..' '..#x..' '..x[1]..' '..x[2]\n");
             b.put("x", new int[] { 777, 888 });
@@ -241,6 +236,7 @@ public class ScriptEngineTests extends TestSuite {
             assertEquals(int[].class, b.get("y").getClass());
         }
 
+        @Test
         public void testBindingLuaFunction() throws ScriptException {
             CompiledScript cs = ((Compilable) e).compile("y = function(x) return 678 + x end; return 'foo'");
             assertEquals("foo", cs.eval(b).toString());
@@ -248,6 +244,7 @@ public class ScriptEngineTests extends TestSuite {
             assertEquals(LuaValue.valueOf(801), ((LuaFunction) b.get("y")).call(LuaValue.valueOf(123)));
         }
 
+        @Test
         public void testUserClasses() throws ScriptException {
             CompiledScript cs = ((Compilable) e).compile(
                 "x = x or luajava.newInstance('java.lang.String', 'test')\n" +
@@ -257,6 +254,7 @@ public class ScriptEngineTests extends TestSuite {
             assertEquals("x userdata some-user-value", cs.eval(b));
         }
 
+        @Test
         public void testReturnMultipleValues() throws ScriptException {
             CompiledScript cs = ((Compilable) e).compile("return 'foo', 'bar'\n");
             Object o = cs.eval();
@@ -274,7 +272,7 @@ public class ScriptEngineTests extends TestSuite {
         }
     }
 
-    public static class UserContextTest extends TestCase {
+    public static class UserContextTest {
         protected ScriptEngine e;
         protected Bindings b;
         protected ScriptContext c;
@@ -285,6 +283,7 @@ public class ScriptEngineTests extends TestSuite {
             this.b = c.getBindings(ScriptContext.ENGINE_SCOPE);
         }
 
+        @Test
         public void testUncompiledScript() throws ScriptException {
             b.put("x", 144);
             assertEquals(12, e.eval("z = math.sqrt(x); return z", b));
@@ -299,6 +298,7 @@ public class ScriptEngineTests extends TestSuite {
             assertEquals(null, e.getBindings(ScriptContext.GLOBAL_SCOPE).get("z"));
         }
 
+        @Test
         public void testCompiledScript() throws ScriptException {
             CompiledScript cs = ((Compilable) e).compile("z = math.sqrt(x); return z");
 
@@ -312,7 +312,7 @@ public class ScriptEngineTests extends TestSuite {
         }
     }
 
-    public static class WriterTest extends TestCase {
+    public static class WriterTest {
         protected ScriptEngine e;
         protected Bindings b;
 
@@ -321,6 +321,7 @@ public class ScriptEngineTests extends TestSuite {
             this.b = e.getBindings(ScriptContext.ENGINE_SCOPE);
         }
 
+        @Test
         public void testWriter() throws ScriptException {
             CharArrayWriter output = new CharArrayWriter();
             CharArrayWriter errors = new CharArrayWriter();

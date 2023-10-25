@@ -21,23 +21,26 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
-import java.io.InputStream;
-import java.io.Reader;
-
-import junit.framework.TestCase;
-
+import org.junit.jupiter.api.Test;
 import org.luaj.vm2.lib.jse.JsePlatform;
 import org.luaj.vm2.server.Launcher;
 import org.luaj.vm2.server.LuajClassLoader;
 
-// Tests using class loading orders that have caused problems for some use cases.
-public class LoadOrderTest extends TestCase {
+import java.io.InputStream;
+import java.io.Reader;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+// Tests using class loading orders that have caused problems for some use cases.
+public class LoadOrderTest {
+
+    @Test
     public void testLoadGlobalsFirst() {
         Globals g = JsePlatform.standardGlobals();
         assertNotNull(g);
     }
 
+    @Test
     public void testLoadStringFirst() {
         LuaString BAR = LuaString.valueOf("bar");
         assertNotNull(BAR);
@@ -60,6 +63,7 @@ public class LoadOrderTest extends TestCase {
         }
     }
 
+    @Test
     public void testClassLoadsStringFirst() throws Exception {
         Launcher launcher = LuajClassLoader
             .NewLauncher(TestLauncherLoadStringFirst.class);

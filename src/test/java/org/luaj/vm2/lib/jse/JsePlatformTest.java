@@ -1,13 +1,15 @@
 package org.luaj.vm2.lib.jse;
 
-import junit.framework.TestCase;
-
+import org.junit.jupiter.api.Test;
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.Varargs;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JsePlatformTest extends TestCase {
+
+public class JsePlatformTest {
+    @Test
     public void testLuaMainPassesArguments() {
         Globals globals = JsePlatform.standardGlobals();
         LuaValue chunk = globals.load("return #arg, arg.n, arg[2], arg[1]");

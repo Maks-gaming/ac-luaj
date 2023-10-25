@@ -1,11 +1,12 @@
 package org.luaj.vm2.lib.jse;
 
-import junit.framework.TestCase;
-
+import org.junit.jupiter.api.Test;
 import org.luaj.vm2.LuaError;
 import org.luaj.vm2.LuaValue;
 
-public class LuajavaClassMembersTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.*;
+
+public class LuajavaClassMembersTest {
     public static class A {
         protected A() {}
     }
@@ -90,6 +91,7 @@ public class LuajavaClassMembersTest extends TestCase {
     static LuaValue SOMEB = CoerceJavaToLua.coerce(new B());
     static LuaValue SOMEC = CoerceJavaToLua.coerce(new C());
 
+    @Test
     public void testSetByteField() {
         B b = new B();
         JavaInstance i = new JavaInstance(b);
@@ -104,6 +106,7 @@ public class LuajavaClassMembersTest extends TestCase {
         assertEquals(ZERO, i.get("m_byte_field"));
     }
 
+    @Test
     public void testSetDoubleField() {
         B b = new B();
         JavaInstance i = new JavaInstance(b);
@@ -118,6 +121,7 @@ public class LuajavaClassMembersTest extends TestCase {
         assertEquals(ZERO, i.get("m_double_field"));
     }
 
+    @Test
     public void testNoFactory() {
         JavaClass c = JavaClass.forClass(A.class);
         try {
@@ -127,6 +131,7 @@ public class LuajavaClassMembersTest extends TestCase {
         }
     }
 
+    @Test
     public void testUniqueFactoryCoercible() {
         JavaClass c = JavaClass.forClass(B.class);
         assertEquals(JavaClass.class, c.getClass());
@@ -141,6 +146,7 @@ public class LuajavaClassMembersTest extends TestCase {
         assertEquals(0, ((B) b0).m_int_field);
     }
 
+    @Test
     public void testUniqueFactoryUncoercible() {
         JavaClass f = JavaClass.forClass(B.class);
         LuaValue constr = f.get("new");
@@ -154,6 +160,7 @@ public class LuajavaClassMembersTest extends TestCase {
         }
     }
 
+    @Test
     public void testOverloadedFactoryCoercible() {
         JavaClass f = JavaClass.forClass(C.class);
         LuaValue constr = f.get("new");
@@ -176,6 +183,7 @@ public class LuajavaClassMembersTest extends TestCase {
         assertEquals(456, ((C) csi).m_int_field);
     }
 
+    @Test
     public void testOverloadedFactoryUncoercible() {
         JavaClass f = JavaClass.forClass(C.class);
         try {
@@ -187,6 +195,7 @@ public class LuajavaClassMembersTest extends TestCase {
         }
     }
 
+    @Test
     public void testNoAttribute() {
         JavaClass f = JavaClass.forClass(A.class);
         LuaValue v = f.get("bogus");
@@ -197,6 +206,7 @@ public class LuajavaClassMembersTest extends TestCase {
         } catch (LuaError e) {}
     }
 
+    @Test
     public void testFieldAttributeCoercible() {
         JavaInstance i = new JavaInstance(new B());
         i.set("m_int_field", ONE);
@@ -210,6 +220,7 @@ public class LuajavaClassMembersTest extends TestCase {
         assertEquals(3, i.get("m_int_field").toint());
     }
 
+    @Test
     public void testUniqueMethodAttributeCoercible() {
         B b = new B();
         JavaInstance ib = new JavaInstance(b);
@@ -223,6 +234,7 @@ public class LuajavaClassMembersTest extends TestCase {
         assertEquals(200000, b_getint.call(SOMEC).toint());
     }
 
+    @Test
     public void testUniqueMethodAttributeArgsCoercible() {
         B b = new B();
         JavaInstance ib = new JavaInstance(b);
@@ -244,6 +256,7 @@ public class LuajavaClassMembersTest extends TestCase {
         assertEquals("uniqis(int:1,string:abc)", uniqis.invoke(LuaValue.varargsOf(new LuaValue[] { SOMEB, ONE, ABC, ONE })).arg1().tojstring());
     }
 
+    @Test
     public void testOverloadedMethodAttributeCoercible() {
         B b = new B();
         JavaInstance ib = new JavaInstance(b);
@@ -256,6 +269,7 @@ public class LuajavaClassMembersTest extends TestCase {
         assertEquals("pick(int:1,string:abc)", p.invoke(LuaValue.varargsOf(new LuaValue[] { SOMEB, ONE, ABC, ONE })).arg1().tojstring());
     }
 
+    @Test
     public void testUnboundOverloadedMethodAttributeCoercible() {
         B b = new B();
         JavaInstance ib = new JavaInstance(b);
@@ -269,6 +283,7 @@ public class LuajavaClassMembersTest extends TestCase {
         assertEquals("pick(int:1,string:abc)", p.invoke(LuaValue.varargsOf(new LuaValue[] { SOMEC, ONE, ABC, ONE })).arg1().tojstring());
     }
 
+    @Test
     public void testOverloadedStaticMethodAttributeCoercible() {
         B b = new B();
         JavaInstance ib = new JavaInstance(b);
@@ -281,6 +296,7 @@ public class LuajavaClassMembersTest extends TestCase {
         assertEquals("static-pick(int:1,string:abc)", p.invoke(LuaValue.varargsOf(new LuaValue[] { SOMEB, ONE, ABC, ONE })).arg1().tojstring());
     }
 
+    @Test
     public void testGetInnerClass() {
         C c = new C();
         JavaInstance ic = new JavaInstance(c);

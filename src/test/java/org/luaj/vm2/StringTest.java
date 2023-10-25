@@ -1,19 +1,23 @@
 package org.luaj.vm2;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.luaj.vm2.lib.jse.JsePlatform;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.luaj.vm2.lib.jse.JsePlatform;
+public class StringTest {
 
-public class StringTest extends TestCase {
-
+    @BeforeEach
     protected void setUp() throws Exception {
         JsePlatform.standardGlobals();
     }
 
+    @Test
     public void testToInputStream() throws IOException {
         LuaString str = LuaString.valueOf("Hello");
 
@@ -67,6 +71,7 @@ public class StringTest extends TestCase {
         return sb.toString();
     }
 
+    @Test
     public void testUtf820482051() throws UnsupportedEncodingException {
         int i = 2048;
         char[] c = { (char) (i + 0), (char) (i + 1), (char) (i + 2), (char) (i + 3) };
@@ -76,6 +81,7 @@ public class StringTest extends TestCase {
         assertEquals(userFriendly(before), userFriendly(after));
     }
 
+    @Test
     public void testUtf8() {
         for (int i = 4; i < 0xffff; i += 4) {
             char[] c = { (char) (i + 0), (char) (i + 1), (char) (i + 2), (char) (i + 3) };
@@ -91,6 +97,7 @@ public class StringTest extends TestCase {
         assertEquals(userFriendly(before), userFriendly(after));
     }
 
+    @Test
     public void testSpotCheckUtf8() throws UnsupportedEncodingException {
         byte[] bytes = { (byte) 194, (byte) 160, (byte) 194, (byte) 161, (byte) 194, (byte) 162, (byte) 194, (byte) 163, (byte) 194, (byte) 164 };
         String expected = new String(bytes, "UTF8");
@@ -104,6 +111,7 @@ public class StringTest extends TestCase {
         assertEquals(expected, actual);
     }
 
+    @Test
     public void testNullTerminated() {
         char[] c = { 'a', 'b', 'c', '\0', 'd', 'e', 'f' };
         String before = new String(c);
@@ -112,6 +120,7 @@ public class StringTest extends TestCase {
         assertEquals(userFriendly("abc\0def"), userFriendly(after));
     }
 
+    @Test
     public void testRecentStringsCacheDifferentHashcodes() {
         final byte[] abc = { 'a', 'b', 'c' };
         final byte[] xyz = { 'x', 'y', 'z' };
@@ -125,6 +134,7 @@ public class StringTest extends TestCase {
         assertSame(xyz1, xyz2);
     }
 
+    @Test
     public void testRecentStringsCacheHashCollisionCacheHit() {
         final byte[] abc = { 'a', 'b', 'c' };
         final byte[] lyz = { 'l', 'y', 'z' };  // chosen to have hash collision with 'abc'
@@ -140,6 +150,7 @@ public class StringTest extends TestCase {
         assertSame(lyz1, lyz2);
     }
 
+    @Test
     public void testRecentStringsCacheHashCollisionCacheMiss() {
         final byte[] abc = { 'a', 'b', 'c' };
         final byte[] lyz = { 'l', 'y', 'z' };  // chosen to have hash collision with 'abc'
@@ -155,6 +166,7 @@ public class StringTest extends TestCase {
         assertNotSame(lyz1, lyz2);
     }
 
+    @Test
     public void testRecentStringsLongStrings() {
         byte[] abc = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".getBytes();
         assertTrue(abc.length > LuaString.RECENT_STRINGS_MAX_LENGTH);
@@ -163,6 +175,7 @@ public class StringTest extends TestCase {
         assertNotSame(abc1, abc2);
     }
 
+    @Test
     public void testRecentStringsUsingJavaStrings() {
         final String abc = "abc";
         final String lyz = "lyz";  // chosen to have hash collision with 'abc'
@@ -193,6 +206,7 @@ public class StringTest extends TestCase {
         assertSame(xyz3, xyz4);  // because hashes do not collide
     }
 
+    @Test
     public void testLongSubstringGetsOldBacking() {
         LuaString src = LuaString.valueOf("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
         LuaString sub1 = src.substring(10, 40);
@@ -201,6 +215,7 @@ public class StringTest extends TestCase {
         assertEquals(sub1.m_length, 30);
     }
 
+    @Test
     public void testShortSubstringGetsNewBacking() {
         LuaString src = LuaString.valueOf("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
         LuaString sub1 = src.substring(10, 20);
@@ -211,6 +226,7 @@ public class StringTest extends TestCase {
         assertFalse(src.m_bytes == sub1.m_bytes);
     }
 
+    @Test
     public void testShortSubstringOfVeryLongStringGetsNewBacking() {
         LuaString src = LuaString.valueOf(
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" +
@@ -223,6 +239,7 @@ public class StringTest extends TestCase {
         assertFalse(src.m_bytes == sub1.m_bytes);
     }
 
+    @Test
     public void testIndexOfByteInSubstring() {
         LuaString str = LuaString.valueOf("abcdef:ghi");
         LuaString sub = str.substring(2, 10);
@@ -256,6 +273,7 @@ public class StringTest extends TestCase {
         assertEquals(-1, sub.indexOf((byte) 'z', 7));
     }
 
+    @Test
     public void testIndexOfPatternInSubstring() {
         LuaString str = LuaString.valueOf("abcdef:ghi");
         LuaString sub = str.substring(2, 10);
@@ -293,6 +311,7 @@ public class StringTest extends TestCase {
         assertEquals(-1, sub.indexOf(xyz, 7));
     }
 
+    @Test
     public void testLastIndexOfPatternInSubstring() {
         LuaString str = LuaString.valueOf("abcdef:ghi");
         LuaString sub = str.substring(2, 10);
@@ -314,6 +333,7 @@ public class StringTest extends TestCase {
         assertEquals(-1, sub.lastIndexOf(xyz));
     }
 
+    @Test
     public void testIndexOfAnyInSubstring() {
         LuaString str = LuaString.valueOf("abcdef:ghi");
         LuaString sub = str.substring(2, 10);
@@ -350,6 +370,7 @@ public class StringTest extends TestCase {
         assertEquals(-1, sub.indexOfAny(EFGHIJKL));
     }
 
+    @Test
     public void testMatchShortPatterns() {
         LuaValue[] args = { LuaString.valueOf("%bxy") };
         LuaString empty = LuaString.valueOf("");

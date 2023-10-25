@@ -21,17 +21,16 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
-import junit.framework.TestCase;
-
-import org.luaj.vm2.LuaString;
-import org.luaj.vm2.LuaTable;
-import org.luaj.vm2.LuaValue;
+import org.junit.jupiter.api.Test;
 import org.luaj.vm2.lib.TwoArgFunction;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for tables used as lists.
  */
-public class TableHashTest extends TestCase {
+public class TableHashTest {
 
     protected LuaTable new_Table() {
         return new LuaTable();
@@ -41,6 +40,7 @@ public class TableHashTest extends TestCase {
         return new LuaTable(n, m);
     }
 
+    @Test
     public void testSetRemove() {
         LuaTable t = new_Table();
 
@@ -94,6 +94,7 @@ public class TableHashTest extends TestCase {
         }
     }
 
+    @Test
     public void testIndexMetatag() {
         LuaTable t = new_Table();
         LuaTable mt = new_Table();
@@ -151,6 +152,7 @@ public class TableHashTest extends TestCase {
         assertEquals("nil", t.get(456).tojstring());
     }
 
+    @Test
     public void testIndexFunction() {
         final LuaTable t = new_Table();
         final LuaTable mt = new_Table();
@@ -206,6 +208,7 @@ public class TableHashTest extends TestCase {
         assertEquals("nil", t.get(456).tojstring());
     }
 
+    @Test
     public void testNext() {
         final LuaTable t = new_Table();
         assertEquals(LuaValue.NIL, t.next(LuaValue.NIL));
@@ -243,6 +246,7 @@ public class TableHashTest extends TestCase {
         assertEquals(LuaValue.NIL, t.next(LuaValue.valueOf("bb")));
     }
 
+    @Test
     public void testLoopWithRemoval() {
         final LuaTable t = new_Table();
 
@@ -278,6 +282,7 @@ public class TableHashTest extends TestCase {
         assertEquals(5, numEntries);
     }
 
+    @Test
     public void testLoopWithRemovalAndSet() {
         final LuaTable t = new_Table();
 

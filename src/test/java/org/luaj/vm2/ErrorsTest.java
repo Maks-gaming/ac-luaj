@@ -21,6 +21,8 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
+import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -39,10 +41,7 @@ public class ErrorsTest extends ScriptDrivenTest {
         super(ScriptDrivenTest.PlatformType.JSE, dir);
     }
 
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
+    @Test
     public void testBaseLibArgs() {
         globals.STDIN = new InputStream() {
             public int read() throws IOException {
@@ -52,20 +51,28 @@ public class ErrorsTest extends ScriptDrivenTest {
         runTest("baselibargs");
     }
 
+    @Test
     public void testCoroutineLibArgs() {runTest("coroutinelibargs");}
 
+    @Test
     public void testDebugLibArgs() {runTest("debuglibargs");}
 
+    @Test
     public void testIoLibArgs() {runTest("iolibargs");}
 
+    @Test
     public void testMathLibArgs() {runTest("mathlibargs");}
 
+    @Test
     public void testModuleLibArgs() {runTest("modulelibargs");}
 
+    @Test
     public void testOperators() {runTest("operators");}
 
+    @Test
     public void testStringLibArgs() {runTest("stringlibargs");}
 
+    @Test
     public void testTableLibArgs() {runTest("tablelibargs");}
 
 }

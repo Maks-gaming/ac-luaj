@@ -21,12 +21,14 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.Vector;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class TableTest extends TestCase {
+public class TableTest {
 
     protected LuaTable new_Table() {
         return new LuaTable();
@@ -53,6 +55,7 @@ public class TableTest extends TestCase {
     }
 
 
+    @Test
     public void testInOrderIntegerKeyInsertion() {
         LuaTable t = new_Table();
 
@@ -73,6 +76,7 @@ public class TableTest extends TestCase {
 
     }
 
+    @Test
     public void testRekeyCount() {
         LuaTable t = new_Table();
 
@@ -93,6 +97,7 @@ public class TableTest extends TestCase {
         assertTrue(t.getHashLength() <= 3);
     }
 
+    @Test
     public void testOutOfOrderIntegerKeyInsertion() {
         LuaTable t = new_Table();
 
@@ -110,6 +115,7 @@ public class TableTest extends TestCase {
         assertEquals(0, t.getHashLength());
     }
 
+    @Test
     public void testStringAndIntegerKeys() {
         LuaTable t = new_Table();
 
@@ -144,7 +150,7 @@ public class TableTest extends TestCase {
                 assertEquals(String.valueOf(ik), k.strvalue().tojstring());
                 assertTrue(ik >= 0 && ik < 10);
                 final int mask = 1 << ik;
-                assertTrue("Key \"" + ik + "\" found more than once", (stringKeys & mask) == 0);
+                assertTrue((stringKeys & mask) == 0, "Key \"" + ik + "\" found more than once");
                 stringKeys |= mask;
             } else {
                 fail("Unexpected type of key found");
@@ -155,6 +161,7 @@ public class TableTest extends TestCase {
         assertEquals(0x03FF, stringKeys);
     }
 
+    @Test
     public void testBadInitialCapacity() {
         LuaTable t = new_Table(0, 1);
 
@@ -163,6 +170,7 @@ public class TableTest extends TestCase {
         assertEquals(2, keyCount(t));
     }
 
+    @Test
     public void testRemove0() {
         LuaTable t = new_Table(2, 0);
 
@@ -180,6 +188,7 @@ public class TableTest extends TestCase {
         assertEquals(LuaValue.NIL, t.get(3));
     }
 
+    @Test
     public void testRemove1() {
         LuaTable t = new_Table(0, 1);
 
@@ -195,6 +204,7 @@ public class TableTest extends TestCase {
         assertEquals(0, keyCount(t));
     }
 
+    @Test
     public void testRemove2() {
         LuaTable t = new_Table(0, 1);
 
@@ -219,6 +229,7 @@ public class TableTest extends TestCase {
         assertEquals(0, keyCount(t));
     }
 
+    @Test
     public void testShrinkNonPowerOfTwoArray() {
         LuaTable t = new_Table(6, 2);
 
@@ -254,6 +265,7 @@ public class TableTest extends TestCase {
         assertEquals("ddd", t.get("dd").tojstring());
     }
 
+    @Test
     public void testInOrderLuaLength() {
         LuaTable t = new_Table();
 
@@ -263,6 +275,7 @@ public class TableTest extends TestCase {
         }
     }
 
+    @Test
     public void testOutOfOrderLuaLength() {
         LuaTable t = new_Table();
 
@@ -274,6 +287,7 @@ public class TableTest extends TestCase {
         }
     }
 
+    @Test
     public void testStringKeysLuaLength() {
         LuaTable t = new_Table();
 
@@ -283,6 +297,7 @@ public class TableTest extends TestCase {
         }
     }
 
+    @Test
     public void testMixedKeysLuaLength() {
         LuaTable t = new_Table();
 
@@ -304,6 +319,7 @@ public class TableTest extends TestCase {
         }
     }
 
+    @Test
     public void testInsertBeginningOfList() {
         LuaTable t = new_Table();
         Vector v = new Vector();
@@ -316,6 +332,7 @@ public class TableTest extends TestCase {
         }
     }
 
+    @Test
     public void testInsertEndOfList() {
         LuaTable t = new_Table();
         Vector v = new Vector();
@@ -328,6 +345,7 @@ public class TableTest extends TestCase {
         }
     }
 
+    @Test
     public void testInsertMiddleOfList() {
         LuaTable t = new_Table();
         Vector v = new Vector();
@@ -349,6 +367,7 @@ public class TableTest extends TestCase {
         }
     }
 
+    @Test
     public void testRemoveBeginningOfList() {
         LuaTable t = new_Table();
         Vector v = new Vector();
@@ -360,6 +379,7 @@ public class TableTest extends TestCase {
         }
     }
 
+    @Test
     public void testRemoveEndOfList() {
         LuaTable t = new_Table();
         Vector v = new Vector();
@@ -371,6 +391,7 @@ public class TableTest extends TestCase {
         }
     }
 
+    @Test
     public void testRemoveMiddleOfList() {
         LuaTable t = new_Table();
         Vector v = new Vector();
@@ -383,6 +404,7 @@ public class TableTest extends TestCase {
         }
     }
 
+    @Test
     public void testRemoveWhileIterating() {
         LuaTable t = LuaValue.tableOf(new LuaValue[] {
             LuaValue.valueOf("a"), LuaValue.valueOf("aa"),

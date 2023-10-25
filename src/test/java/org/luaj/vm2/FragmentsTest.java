@@ -21,20 +21,20 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
+import org.luaj.vm2.lib.jse.JsePlatform;
+import org.luaj.vm2.luajc.LuaJC;
+
 import java.io.Reader;
 import java.io.StringReader;
 
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-import org.luaj.vm2.lib.jse.JsePlatform;
-import org.luaj.vm2.luajc.LuaJC;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test compilation of various fragments that have
  * caused problems for jit compiling during development.
  */
-public class FragmentsTest extends TestSuite {
+public class FragmentsTest {
 
     static final int TEST_TYPE_LUAC = 0;
     static final int TEST_TYPE_LUAJC = 1;
@@ -47,14 +47,7 @@ public class FragmentsTest extends TestSuite {
         public LuaJCFragmentsTest() {super(TEST_TYPE_LUAJC);}
     }
 
-    public static TestSuite suite() {
-        TestSuite suite = new TestSuite("Compiler Fragments Tests");
-        suite.addTest(new TestSuite(JseFragmentsTest.class, "JSE Fragments Tests"));
-        suite.addTest(new TestSuite(LuaJCFragmentsTest.class, "LuaJC Fragments Tests"));
-        return suite;
-    }
-
-    abstract protected static class FragmentsTestCase extends TestCase {
+    abstract protected static class FragmentsTestCase {
 
         final int TEST_TYPE;
 
@@ -64,7 +57,7 @@ public class FragmentsTest extends TestSuite {
 
         public void runFragment(Varargs expected, String script) {
             try {
-                String name = getName();
+                String name = getClass().getName();
                 Globals globals = JsePlatform.debugGlobals();
                 Reader reader = new StringReader(script);
                 LuaValue chunk;
