@@ -42,7 +42,7 @@ public class ScriptDrivenTest extends TestCase implements ResourceFinder {
     private final String subdir;
     protected Globals globals;
 
-    static final String zipdir = "test/lua/";
+    static final String zipdir = "src/test/lua/";
     static final String zipfile = "luaj3.0-tests.zip";
 
     protected ScriptDrivenTest(PlatformType platform, String subdir) {
