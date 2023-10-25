@@ -21,29 +21,21 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import junit.framework.TestCase;
-
 import org.luaj.vm2.lib.ResourceFinder;
 import org.luaj.vm2.lib.jse.JseProcess;
 import org.luaj.vm2.luajc.LuaJC;
+
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 abstract
 public class ScriptDrivenTest extends TestCase implements ResourceFinder {
     public static final boolean nocompile = "true".equals(System.getProperty("nocompile"));
 
     public enum PlatformType {
-        JME, JSE, LUAJIT,
+        JSE, LUAJIT,
     }
 
     private final PlatformType platform;
@@ -65,9 +57,6 @@ public class ScriptDrivenTest extends TestCase implements ResourceFinder {
             case JSE:
             case LUAJIT:
                 globals = org.luaj.vm2.lib.jse.JsePlatform.debugGlobals();
-                break;
-            case JME:
-                globals = org.luaj.vm2.lib.jme.JmePlatform.debugGlobals();
                 break;
         }
     }

@@ -21,15 +21,13 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
+import junit.framework.TestCase;
+import org.luaj.vm2.TypeTest.MyData;
+import org.luaj.vm2.lib.ZeroArgFunction;
+
 import java.io.Reader;
 import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
-
-import junit.framework.TestCase;
-
-import org.luaj.vm2.TypeTest.MyData;
-import org.luaj.vm2.compiler.LuaC;
-import org.luaj.vm2.lib.ZeroArgFunction;
 
 public class LuaOperationsTest extends TestCase {
 

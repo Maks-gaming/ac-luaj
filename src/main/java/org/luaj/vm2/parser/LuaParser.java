@@ -14,18 +14,18 @@ public class LuaParser implements LuaParserConstants {
         LuaValue.valueOf(true);
     }
 
-    public static void main(String args[]) throws ParseException {
-        LuaParser parser = new LuaParser(System.in);
+    public static void main(final String[] args) throws ParseException {
+        final LuaParser parser = new LuaParser(System.in);
         parser.Chunk();
     }
 
-    private static Exp.VarExp assertvarexp(Exp.PrimaryExp pe) throws ParseException {
+    private static Exp.VarExp assertvarexp(final Exp.PrimaryExp pe) throws ParseException {
         if (!pe.isvarexp())
             throw new ParseException("expected variable");
         return (Exp.VarExp) pe;
     }
 
-    private static Exp.FuncCall assertfunccall(Exp.PrimaryExp pe) throws ParseException {
+    private static Exp.FuncCall assertfunccall(final Exp.PrimaryExp pe) throws ParseException {
         if (!pe.isfunccall())
             throw new ParseException("expected function call");
         return (Exp.FuncCall) pe;
@@ -39,14 +39,14 @@ public class LuaParser implements LuaParserConstants {
         return ((long) jj_input_stream.getBeginLine() << 32) | jj_input_stream.getBeginColumn();
     }
 
-    private void L(SyntaxElement e, long startinfo) {
+    private void L(final SyntaxElement e, final long startinfo) {
         e.beginLine = (int) (startinfo >> 32);
         e.beginColumn = (short) startinfo;
         e.endLine = token.endLine;
         e.endColumn = (short) token.endColumn;
     }
 
-    private void L(SyntaxElement e, Token starttoken) {
+    private void L(final SyntaxElement e, final Token starttoken) {
         e.beginLine = starttoken.beginLine;
         e.beginColumn = (short) starttoken.beginColumn;
         e.endLine = token.endLine;
@@ -57,9 +57,9 @@ public class LuaParser implements LuaParserConstants {
      * Root production.
      */
     final public Chunk Chunk() throws ParseException {
-        Block b;
-        Chunk c;
-        long i = LineInfo();
+        final Block b;
+        final Chunk c;
+        final long i = LineInfo();
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
             case 69:
                 jj_consume_token(69);
@@ -67,7 +67,6 @@ public class LuaParser implements LuaParserConstants {
                 break;
             default:
                 jj_la1[0] = jj_gen;
-                ;
         }
         b = Block();
         jj_consume_token(0);
@@ -78,9 +77,9 @@ public class LuaParser implements LuaParserConstants {
     }
 
     final public Block Block() throws ParseException {
-        Block b = new Block();
+        final Block b = new Block();
         Stat s;
-        long i = LineInfo();
+        final long i = LineInfo();
         label_1:
         while (true) {
             switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
@@ -97,7 +96,6 @@ public class LuaParser implements LuaParserConstants {
                 case DBCOLON:
                 case 70:
                 case 75:
-                    ;
                     break;
                 default:
                     jj_la1[1] = jj_gen;
@@ -113,7 +111,6 @@ public class LuaParser implements LuaParserConstants {
                 break;
             default:
                 jj_la1[2] = jj_gen;
-                ;
         }
         L(b, i);
         {if (true) return b;}
@@ -121,15 +118,18 @@ public class LuaParser implements LuaParserConstants {
     }
 
     final public Stat Stat() throws ParseException {
-        Block b, b2;
-        Exp e, e2, e3 = null;
-        Stat s;
-        FuncName fn;
-        FuncBody fb;
-        Token n;
-        List<Name> nl;
+        final Block b;
+        Block b2;
+        final Exp e;
+        final Exp e2;
+        Exp e3 = null;
+        final Stat s;
+        final FuncName fn;
+        final FuncBody fb;
+        final Token n;
+        final List<Name> nl;
         List<Exp> el = null;
-        long i = LineInfo();
+        final long i = LineInfo();
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
             case 70:
                 jj_consume_token(70);
@@ -201,7 +201,6 @@ public class LuaParser implements LuaParserConstants {
                             break;
                         default:
                             jj_la1[3] = jj_gen;
-                            ;
                     }
                     jj_consume_token(DO);
                     b = Block();
@@ -253,7 +252,6 @@ public class LuaParser implements LuaParserConstants {
                                                 break;
                                             default:
                                                 jj_la1[4] = jj_gen;
-                                                ;
                                         }
                                         s = Stat.localassignment(nl, el);
                                         L(s, i);
@@ -278,8 +276,11 @@ public class LuaParser implements LuaParserConstants {
     }
 
     final public Stat IfThenElse() throws ParseException {
-        Block b, b2, b3 = null;
-        Exp e, e2;
+        final Block b;
+        Block b2;
+        Block b3 = null;
+        final Exp e;
+        Exp e2;
         List<Exp> el = null;
         List<Block> bl = null;
         jj_consume_token(IF);
@@ -290,7 +291,6 @@ public class LuaParser implements LuaParserConstants {
         while (true) {
             switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
                 case ELSEIF:
-                    ;
                     break;
                 default:
                     jj_la1[8] = jj_gen;
@@ -312,7 +312,6 @@ public class LuaParser implements LuaParserConstants {
                 break;
             default:
                 jj_la1[9] = jj_gen;
-                ;
         }
         jj_consume_token(END);
         {if (true) return Stat.ifthenelse(e, b, el, bl, b3);}
@@ -321,8 +320,8 @@ public class LuaParser implements LuaParserConstants {
 
     final public Stat ReturnStat() throws ParseException {
         List<Exp> el = null;
-        Stat s;
-        long i = LineInfo();
+        final Stat s;
+        final long i = LineInfo();
         jj_consume_token(RETURN);
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
             case LONGSTRING0:
@@ -348,7 +347,6 @@ public class LuaParser implements LuaParserConstants {
                 break;
             default:
                 jj_la1[10] = jj_gen;
-                ;
         }
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
             case 70:
@@ -356,7 +354,6 @@ public class LuaParser implements LuaParserConstants {
                 break;
             default:
                 jj_la1[11] = jj_gen;
-                ;
         }
         s = Stat.returnstat(el);
         L(s, i);
@@ -365,7 +362,7 @@ public class LuaParser implements LuaParserConstants {
     }
 
     final public Stat Label() throws ParseException {
-        Token n;
+        final Token n;
         jj_consume_token(DBCOLON);
         n = jj_consume_token(NAME);
         jj_consume_token(DBCOLON);
@@ -374,9 +371,9 @@ public class LuaParser implements LuaParserConstants {
     }
 
     final public Stat ExprStat() throws ParseException {
-        Exp.PrimaryExp p;
+        final Exp.PrimaryExp p;
         Stat s = null;
-        long i = LineInfo();
+        final long i = LineInfo();
         p = PrimaryExp();
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
             case 71:
@@ -385,7 +382,6 @@ public class LuaParser implements LuaParserConstants {
                 break;
             default:
                 jj_la1[12] = jj_gen;
-                ;
         }
         if (s == null) {s = Stat.functioncall(assertfunccall(p));}
         L(s, i);
@@ -393,18 +389,17 @@ public class LuaParser implements LuaParserConstants {
         throw new Error("Missing return statement in function");
     }
 
-    final public Stat Assign(Exp.VarExp v0) throws ParseException {
-        List<Exp.VarExp> vl = new ArrayList<Exp.VarExp>();
+    final public Stat Assign(final Exp.VarExp v0) throws ParseException {
+        final List<Exp.VarExp> vl = new ArrayList<Exp.VarExp>();
         vl.add(v0);
         Exp.VarExp ve;
-        List<Exp> el;
-        Stat s;
-        long i = LineInfo();
+        final List<Exp> el;
+        final Stat s;
+        final long i = LineInfo();
         label_3:
         while (true) {
             switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
                 case 72:
-                    ;
                     break;
                 default:
                     jj_la1[13] = jj_gen;
@@ -423,7 +418,7 @@ public class LuaParser implements LuaParserConstants {
     }
 
     final public Exp.VarExp VarExp() throws ParseException {
-        Exp.PrimaryExp p;
+        final Exp.PrimaryExp p;
         p = PrimaryExp();
         {if (true) return assertvarexp(p);}
         throw new Error("Missing return statement in function");
@@ -431,14 +426,13 @@ public class LuaParser implements LuaParserConstants {
 
     final public FuncName FuncName() throws ParseException {
         Token n;
-        FuncName f;
+        final FuncName f;
         n = jj_consume_token(NAME);
         f = new FuncName(n.image);
         label_4:
         while (true) {
             switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
                 case 73:
-                    ;
                     break;
                 default:
                     jj_la1[14] = jj_gen;
@@ -456,7 +450,6 @@ public class LuaParser implements LuaParserConstants {
                 break;
             default:
                 jj_la1[15] = jj_gen;
-                ;
         }
         L(f, n);
         {if (true) return f;}
@@ -464,10 +457,10 @@ public class LuaParser implements LuaParserConstants {
     }
 
     final public Exp.PrimaryExp PrefixExp() throws ParseException {
-        Token n;
-        Exp e;
-        Exp.PrimaryExp p;
-        long i = LineInfo();
+        final Token n;
+        final Exp e;
+        final Exp.PrimaryExp p;
+        final long i = LineInfo();
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
             case NAME:
                 n = jj_consume_token(NAME);
@@ -493,14 +486,13 @@ public class LuaParser implements LuaParserConstants {
 
     final public Exp.PrimaryExp PrimaryExp() throws ParseException {
         Exp.PrimaryExp p;
-        long i = LineInfo();
+        final long i = LineInfo();
         p = PrefixExp();
         label_5:
         while (true) {
             if (jj_2_3(2)) {
-                ;
             } else {
-                break label_5;
+                break;
             }
             p = PostfixOp(p);
         }
@@ -509,12 +501,12 @@ public class LuaParser implements LuaParserConstants {
         throw new Error("Missing return statement in function");
     }
 
-    final public Exp.PrimaryExp PostfixOp(Exp.PrimaryExp lhs) throws ParseException {
-        Token n;
-        Exp e;
-        FuncArgs a;
-        Exp.PrimaryExp p;
-        long i = LineInfo();
+    final public Exp.PrimaryExp PostfixOp(final Exp.PrimaryExp lhs) throws ParseException {
+        final Token n;
+        final Exp e;
+        final FuncArgs a;
+        final Exp.PrimaryExp p;
+        final long i = LineInfo();
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
             case 73:
                 jj_consume_token(73);
@@ -563,10 +555,10 @@ public class LuaParser implements LuaParserConstants {
 
     final public FuncArgs FuncArgs() throws ParseException {
         List<Exp> el = null;
-        TableConstructor tc;
-        LuaString s;
-        FuncArgs a;
-        long i = LineInfo();
+        final TableConstructor tc;
+        final LuaString s;
+        final FuncArgs a;
+        final long i = LineInfo();
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
             case 75:
                 jj_consume_token(75);
@@ -594,7 +586,6 @@ public class LuaParser implements LuaParserConstants {
                         break;
                     default:
                         jj_la1[18] = jj_gen;
-                        ;
                 }
                 jj_consume_token(76);
                 a = FuncArgs.explist(el);
@@ -628,16 +619,15 @@ public class LuaParser implements LuaParserConstants {
     }
 
     final public List<Name> NameList() throws ParseException {
-        List<Name> l = new ArrayList<Name>();
+        final List<Name> l = new ArrayList<Name>();
         Token name;
         name = jj_consume_token(NAME);
         l.add(new Name(name.image));
         label_6:
         while (true) {
             if (jj_2_4(2)) {
-                ;
             } else {
-                break label_6;
+                break;
             }
             jj_consume_token(72);
             name = jj_consume_token(NAME);
@@ -648,7 +638,7 @@ public class LuaParser implements LuaParserConstants {
     }
 
     final public List<Exp> ExpList() throws ParseException {
-        List<Exp> l = new ArrayList<Exp>();
+        final List<Exp> l = new ArrayList<Exp>();
         Exp e;
         e = Exp();
         l.add(e);
@@ -656,7 +646,6 @@ public class LuaParser implements LuaParserConstants {
         while (true) {
             switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
                 case 72:
-                    ;
                     break;
                 default:
                     jj_la1[20] = jj_gen;
@@ -671,12 +660,12 @@ public class LuaParser implements LuaParserConstants {
     }
 
     final public Exp SimpleExp() throws ParseException {
-        Token n;
-        LuaString s;
-        Exp e;
-        TableConstructor c;
-        FuncBody b;
-        long i = LineInfo();
+        final Token n;
+        final LuaString s;
+        final Exp e;
+        final TableConstructor c;
+        final FuncBody b;
+        final long i = LineInfo();
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
             case NIL:
                 jj_consume_token(NIL);
@@ -786,7 +775,7 @@ public class LuaParser implements LuaParserConstants {
     final public Exp Exp() throws ParseException {
         Exp e, s;
         int op;
-        long i = LineInfo();
+        final long i = LineInfo();
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
             case LONGSTRING0:
             case LONGSTRING1:
@@ -821,9 +810,8 @@ public class LuaParser implements LuaParserConstants {
         label_8:
         while (true) {
             if (jj_2_5(2)) {
-                ;
             } else {
-                break label_8;
+                break;
             }
             op = Binop();
             s = Exp();
@@ -835,8 +823,8 @@ public class LuaParser implements LuaParserConstants {
     }
 
     final public FuncBody FunctionCall() throws ParseException {
-        FuncBody b;
-        long i = LineInfo();
+        final FuncBody b;
+        final long i = LineInfo();
         jj_consume_token(FUNCTION);
         b = FuncBody();
         L(b, i);
@@ -846,9 +834,9 @@ public class LuaParser implements LuaParserConstants {
 
     final public FuncBody FuncBody() throws ParseException {
         ParList pl = null;
-        Block b;
-        FuncBody f;
-        long i = LineInfo();
+        final Block b;
+        final FuncBody f;
+        final long i = LineInfo();
         jj_consume_token(75);
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
             case NAME:
@@ -857,7 +845,6 @@ public class LuaParser implements LuaParserConstants {
                 break;
             default:
                 jj_la1[24] = jj_gen;
-                ;
         }
         jj_consume_token(76);
         b = Block();
@@ -871,8 +858,8 @@ public class LuaParser implements LuaParserConstants {
     final public ParList ParList() throws ParseException {
         List<Name> l = null;
         boolean v = false;
-        ParList p;
-        long i = LineInfo();
+        final ParList p;
+        final long i = LineInfo();
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
             case NAME:
                 l = NameList();
@@ -884,7 +871,6 @@ public class LuaParser implements LuaParserConstants {
                         break;
                     default:
                         jj_la1[25] = jj_gen;
-                        ;
                 }
                 p = new ParList(l, v);
                 L(p, i);
@@ -905,9 +891,9 @@ public class LuaParser implements LuaParserConstants {
     }
 
     final public TableConstructor TableConstructor() throws ParseException {
-        TableConstructor c = new TableConstructor();
+        final TableConstructor c = new TableConstructor();
         List<TableField> l = null;
-        long i = LineInfo();
+        final long i = LineInfo();
         jj_consume_token(80);
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
             case LONGSTRING0:
@@ -935,7 +921,6 @@ public class LuaParser implements LuaParserConstants {
                 break;
             default:
                 jj_la1[27] = jj_gen;
-                ;
         }
         jj_consume_token(81);
         L(c, i);
@@ -944,16 +929,15 @@ public class LuaParser implements LuaParserConstants {
     }
 
     final public List<TableField> FieldList() throws ParseException {
-        List<TableField> l = new ArrayList<TableField>();
+        final List<TableField> l = new ArrayList<TableField>();
         TableField f;
         f = Field();
         l.add(f);
         label_9:
         while (true) {
             if (jj_2_6(2)) {
-                ;
             } else {
-                break label_9;
+                break;
             }
             FieldSep();
             f = Field();
@@ -966,17 +950,17 @@ public class LuaParser implements LuaParserConstants {
                 break;
             default:
                 jj_la1[28] = jj_gen;
-                ;
         }
         {if (true) return l;}
         throw new Error("Missing return statement in function");
     }
 
     final public TableField Field() throws ParseException {
-        Token name;
-        Exp exp, rhs;
-        TableField f;
-        long i = LineInfo();
+        final Token name;
+        final Exp exp;
+        final Exp rhs;
+        final TableField f;
+        final long i = LineInfo();
         switch ((jj_ntk == -1) ? jj_ntk() : jj_ntk) {
             case 77:
                 jj_consume_token(77);
@@ -1140,115 +1124,106 @@ public class LuaParser implements LuaParserConstants {
         throw new Error("Missing return statement in function");
     }
 
-    private boolean jj_2_1(int xla) {
+    private boolean jj_2_1(final int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
-        try {return !jj_3_1();} catch (LookaheadSuccess ls) {return true;} finally {jj_save(0, xla);}
+        try {return !jj_3_1();} catch (final LookaheadSuccess ls) {return true;} finally {jj_save(0, xla);}
     }
 
-    private boolean jj_2_2(int xla) {
+    private boolean jj_2_2(final int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
-        try {return !jj_3_2();} catch (LookaheadSuccess ls) {return true;} finally {jj_save(1, xla);}
+        try {return !jj_3_2();} catch (final LookaheadSuccess ls) {return true;} finally {jj_save(1, xla);}
     }
 
-    private boolean jj_2_3(int xla) {
+    private boolean jj_2_3(final int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
-        try {return !jj_3_3();} catch (LookaheadSuccess ls) {return true;} finally {jj_save(2, xla);}
+        try {return !jj_3_3();} catch (final LookaheadSuccess ls) {return true;} finally {jj_save(2, xla);}
     }
 
-    private boolean jj_2_4(int xla) {
+    private boolean jj_2_4(final int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
-        try {return !jj_3_4();} catch (LookaheadSuccess ls) {return true;} finally {jj_save(3, xla);}
+        try {return !jj_3_4();} catch (final LookaheadSuccess ls) {return true;} finally {jj_save(3, xla);}
     }
 
-    private boolean jj_2_5(int xla) {
+    private boolean jj_2_5(final int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
-        try {return !jj_3_5();} catch (LookaheadSuccess ls) {return true;} finally {jj_save(4, xla);}
+        try {return !jj_3_5();} catch (final LookaheadSuccess ls) {return true;} finally {jj_save(4, xla);}
     }
 
-    private boolean jj_2_6(int xla) {
+    private boolean jj_2_6(final int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
-        try {return !jj_3_6();} catch (LookaheadSuccess ls) {return true;} finally {jj_save(5, xla);}
+        try {return !jj_3_6();} catch (final LookaheadSuccess ls) {return true;} finally {jj_save(5, xla);}
     }
 
-    private boolean jj_2_7(int xla) {
+    private boolean jj_2_7(final int xla) {
         jj_la = xla;
         jj_lastpos = jj_scanpos = token;
-        try {return !jj_3_7();} catch (LookaheadSuccess ls) {return true;} finally {jj_save(6, xla);}
+        try {return !jj_3_7();} catch (final LookaheadSuccess ls) {return true;} finally {jj_save(6, xla);}
     }
 
     private boolean jj_3R_43() {
-        if (jj_3R_58()) return true;
-        return false;
+        return jj_3R_58();
     }
 
     private boolean jj_3R_42() {
-        if (jj_3R_57()) return true;
-        return false;
+        return jj_3R_57();
     }
 
     private boolean jj_3R_41() {
         if (jj_scan_token(75)) return true;
-        Token xsp;
+        final Token xsp;
         xsp = jj_scanpos;
         if (jj_3R_56()) jj_scanpos = xsp;
-        if (jj_scan_token(76)) return true;
-        return false;
+        return jj_scan_token(76);
     }
 
     private boolean jj_3R_38() {
-        Token xsp;
+        final Token xsp;
         xsp = jj_scanpos;
         if (jj_3R_41()) {
             jj_scanpos = xsp;
             if (jj_3R_42()) {
                 jj_scanpos = xsp;
-                if (jj_3R_43()) return true;
+                return jj_3R_43();
             }
         }
         return false;
     }
 
     private boolean jj_3_3() {
-        if (jj_3R_10()) return true;
-        return false;
+        return jj_3R_10();
     }
 
     private boolean jj_3R_18() {
-        if (jj_3R_38()) return true;
-        return false;
+        return jj_3R_38();
     }
 
     private boolean jj_3R_17() {
         if (jj_scan_token(74)) return true;
-        if (jj_scan_token(NAME)) return true;
-        return false;
+        return jj_scan_token(NAME);
     }
 
     private boolean jj_3R_16() {
         if (jj_scan_token(77)) return true;
-        if (jj_3R_12()) return true;
-        return false;
+        return jj_3R_12();
     }
 
     private boolean jj_3R_35() {
-        if (jj_3R_40()) return true;
-        return false;
+        return jj_3R_40();
     }
 
     private boolean jj_3R_15() {
         if (jj_scan_token(73)) return true;
-        if (jj_scan_token(NAME)) return true;
-        return false;
+        return jj_scan_token(NAME);
     }
 
     private boolean jj_3R_10() {
-        Token xsp;
+        final Token xsp;
         xsp = jj_scanpos;
         if (jj_3R_15()) {
             jj_scanpos = xsp;
@@ -1256,7 +1231,7 @@ public class LuaParser implements LuaParserConstants {
                 jj_scanpos = xsp;
                 if (jj_3R_17()) {
                     jj_scanpos = xsp;
-                    if (jj_3R_18()) return true;
+                    return jj_3R_18();
                 }
             }
         }
@@ -1264,200 +1239,169 @@ public class LuaParser implements LuaParserConstants {
     }
 
     private boolean jj_3R_59() {
-        if (jj_scan_token(FUNCTION)) return true;
-        return false;
+        return jj_scan_token(FUNCTION);
     }
 
     private boolean jj_3_5() {
         if (jj_3R_11()) return true;
-        if (jj_3R_12()) return true;
-        return false;
+        return jj_3R_12();
     }
 
     private boolean jj_3R_60() {
-        if (jj_3R_70()) return true;
-        return false;
+        return jj_3R_70();
     }
 
     private boolean jj_3R_55() {
-        if (jj_scan_token(69)) return true;
-        return false;
+        return jj_scan_token(69);
     }
 
     private boolean jj_3R_54() {
-        if (jj_scan_token(NOT)) return true;
-        return false;
+        return jj_scan_token(NOT);
     }
 
     private boolean jj_3R_53() {
-        if (jj_scan_token(83)) return true;
-        return false;
+        return jj_scan_token(83);
     }
 
     private boolean jj_3R_40() {
-        Token xsp;
+        final Token xsp;
         xsp = jj_scanpos;
         if (jj_3R_53()) {
             jj_scanpos = xsp;
             if (jj_3R_54()) {
                 jj_scanpos = xsp;
-                if (jj_3R_55()) return true;
+                return jj_3R_55();
             }
         }
         return false;
     }
 
     private boolean jj_3R_34() {
-        if (jj_3R_39()) return true;
-        return false;
+        return jj_3R_39();
     }
 
     private boolean jj_3R_12() {
-        Token xsp;
+        final Token xsp;
         xsp = jj_scanpos;
         if (jj_3R_34()) {
             jj_scanpos = xsp;
-            if (jj_3R_35()) return true;
+            return jj_3R_35();
         }
         return false;
     }
 
     private boolean jj_3R_73() {
-        if (jj_scan_token(75)) return true;
-        return false;
+        return jj_scan_token(75);
     }
 
     private boolean jj_3R_33() {
-        if (jj_scan_token(OR)) return true;
-        return false;
+        return jj_scan_token(OR);
     }
 
     private boolean jj_3R_72() {
-        if (jj_scan_token(NAME)) return true;
-        return false;
+        return jj_scan_token(NAME);
     }
 
     private boolean jj_3R_70() {
-        Token xsp;
+        final Token xsp;
         xsp = jj_scanpos;
         if (jj_3R_72()) {
             jj_scanpos = xsp;
-            if (jj_3R_73()) return true;
+            return jj_3R_73();
         }
         return false;
     }
 
     private boolean jj_3_2() {
         if (jj_scan_token(LOCAL)) return true;
-        if (jj_scan_token(FUNCTION)) return true;
-        return false;
+        return jj_scan_token(FUNCTION);
     }
 
     private boolean jj_3R_32() {
-        if (jj_scan_token(AND)) return true;
-        return false;
+        return jj_scan_token(AND);
     }
 
     private boolean jj_3R_31() {
-        if (jj_scan_token(94)) return true;
-        return false;
+        return jj_scan_token(94);
     }
 
     private boolean jj_3_4() {
         if (jj_scan_token(72)) return true;
-        if (jj_scan_token(NAME)) return true;
-        return false;
+        return jj_scan_token(NAME);
     }
 
     private boolean jj_3R_30() {
-        if (jj_scan_token(93)) return true;
-        return false;
+        return jj_scan_token(93);
     }
 
     private boolean jj_3_1() {
         if (jj_scan_token(FOR)) return true;
         if (jj_scan_token(NAME)) return true;
-        if (jj_scan_token(71)) return true;
-        return false;
+        return jj_scan_token(71);
     }
 
     private boolean jj_3R_29() {
-        if (jj_scan_token(92)) return true;
-        return false;
+        return jj_scan_token(92);
     }
 
     private boolean jj_3R_28() {
-        if (jj_scan_token(91)) return true;
-        return false;
+        return jj_scan_token(91);
     }
 
     private boolean jj_3R_69() {
-        if (jj_scan_token(LONGSTRINGN)) return true;
-        return false;
+        return jj_scan_token(LONGSTRINGN);
     }
 
     private boolean jj_3R_27() {
-        if (jj_scan_token(90)) return true;
-        return false;
+        return jj_scan_token(90);
     }
 
     private boolean jj_3R_68() {
-        if (jj_scan_token(LONGSTRING3)) return true;
-        return false;
+        return jj_scan_token(LONGSTRING3);
     }
 
     private boolean jj_3R_26() {
-        if (jj_scan_token(89)) return true;
-        return false;
+        return jj_scan_token(89);
     }
 
     private boolean jj_3R_67() {
-        if (jj_scan_token(LONGSTRING2)) return true;
-        return false;
+        return jj_scan_token(LONGSTRING2);
     }
 
     private boolean jj_3R_25() {
-        if (jj_scan_token(88)) return true;
-        return false;
+        return jj_scan_token(88);
     }
 
     private boolean jj_3R_66() {
-        if (jj_scan_token(LONGSTRING1)) return true;
-        return false;
+        return jj_scan_token(LONGSTRING1);
     }
 
     private boolean jj_3R_24() {
-        if (jj_scan_token(87)) return true;
-        return false;
+        return jj_scan_token(87);
     }
 
     private boolean jj_3R_65() {
-        if (jj_scan_token(LONGSTRING0)) return true;
-        return false;
+        return jj_scan_token(LONGSTRING0);
     }
 
     private boolean jj_3R_23() {
-        if (jj_scan_token(86)) return true;
-        return false;
+        return jj_scan_token(86);
     }
 
     private boolean jj_3R_64() {
-        if (jj_scan_token(CHARSTRING)) return true;
-        return false;
+        return jj_scan_token(CHARSTRING);
     }
 
     private boolean jj_3R_22() {
-        if (jj_scan_token(85)) return true;
-        return false;
+        return jj_scan_token(85);
     }
 
     private boolean jj_3R_63() {
-        if (jj_scan_token(STRING)) return true;
-        return false;
+        return jj_scan_token(STRING);
     }
 
     private boolean jj_3R_58() {
-        Token xsp;
+        final Token xsp;
         xsp = jj_scanpos;
         if (jj_3R_63()) {
             jj_scanpos = xsp;
@@ -1471,7 +1415,7 @@ public class LuaParser implements LuaParserConstants {
                             jj_scanpos = xsp;
                             if (jj_3R_68()) {
                                 jj_scanpos = xsp;
-                                if (jj_3R_69()) return true;
+                                return jj_3R_69();
                             }
                         }
                     }
@@ -1482,22 +1426,19 @@ public class LuaParser implements LuaParserConstants {
     }
 
     private boolean jj_3R_21() {
-        if (jj_scan_token(84)) return true;
-        return false;
+        return jj_scan_token(84);
     }
 
     private boolean jj_3R_20() {
-        if (jj_scan_token(83)) return true;
-        return false;
+        return jj_scan_token(83);
     }
 
     private boolean jj_3R_19() {
-        if (jj_scan_token(82)) return true;
-        return false;
+        return jj_scan_token(82);
     }
 
     private boolean jj_3R_11() {
-        Token xsp;
+        final Token xsp;
         xsp = jj_scanpos;
         if (jj_3R_19()) {
             jj_scanpos = xsp;
@@ -1527,7 +1468,7 @@ public class LuaParser implements LuaParserConstants {
                                                             jj_scanpos = xsp;
                                                             if (jj_3R_32()) {
                                                                 jj_scanpos = xsp;
-                                                                if (jj_3R_33()) return true;
+                                                                return jj_3R_33();
                                                             }
                                                         }
                                                     }
@@ -1547,67 +1488,57 @@ public class LuaParser implements LuaParserConstants {
 
     private boolean jj_3_6() {
         if (jj_3R_13()) return true;
-        if (jj_3R_14()) return true;
-        return false;
+        return jj_3R_14();
     }
 
     private boolean jj_3R_52() {
-        if (jj_3R_60()) return true;
-        return false;
+        return jj_3R_60();
     }
 
     private boolean jj_3R_51() {
-        if (jj_3R_59()) return true;
-        return false;
+        return jj_3R_59();
     }
 
     private boolean jj_3R_50() {
-        if (jj_3R_57()) return true;
-        return false;
+        return jj_3R_57();
     }
 
     private boolean jj_3R_13() {
-        Token xsp;
+        final Token xsp;
         xsp = jj_scanpos;
         if (jj_scan_token(72)) {
             jj_scanpos = xsp;
-            if (jj_scan_token(70)) return true;
+            return jj_scan_token(70);
         }
         return false;
     }
 
     private boolean jj_3R_49() {
-        if (jj_scan_token(79)) return true;
-        return false;
+        return jj_scan_token(79);
     }
 
     private boolean jj_3R_48() {
-        if (jj_3R_58()) return true;
-        return false;
+        return jj_3R_58();
     }
 
     private boolean jj_3R_47() {
-        if (jj_scan_token(NUMBER)) return true;
-        return false;
+        return jj_scan_token(NUMBER);
     }
 
     private boolean jj_3R_46() {
-        if (jj_scan_token(FALSE)) return true;
-        return false;
+        return jj_scan_token(FALSE);
     }
 
     private boolean jj_3R_45() {
-        if (jj_scan_token(TRUE)) return true;
-        return false;
+        return jj_scan_token(TRUE);
     }
 
     private boolean jj_3R_44() {
-        if (jj_scan_token(NIL)) return true;
-        return false;
+        return jj_scan_token(NIL);
     }
 
     private boolean jj_3R_39() {
-        Token xsp;
+        final Token xsp;
         xsp = jj_scanpos;
         if (jj_3R_44()) {
             jj_scanpos = xsp;
@@ -1625,7 +1556,7 @@ public class LuaParser implements LuaParserConstants {
                                     jj_scanpos = xsp;
                                     if (jj_3R_51()) {
                                         jj_scanpos = xsp;
-                                        if (jj_3R_52()) return true;
+                                        return jj_3R_52();
                                     }
                                 }
                             }
@@ -1638,61 +1569,53 @@ public class LuaParser implements LuaParserConstants {
     }
 
     private boolean jj_3R_37() {
-        if (jj_3R_12()) return true;
-        return false;
+        return jj_3R_12();
     }
 
     private boolean jj_3_7() {
         if (jj_scan_token(NAME)) return true;
-        if (jj_scan_token(71)) return true;
-        return false;
+        return jj_scan_token(71);
     }
 
     private boolean jj_3R_14() {
-        Token xsp;
+        final Token xsp;
         xsp = jj_scanpos;
         if (jj_3R_36()) {
             jj_scanpos = xsp;
             if (jj_3_7()) {
                 jj_scanpos = xsp;
-                if (jj_3R_37()) return true;
+                return jj_3R_37();
             }
         }
         return false;
     }
 
     private boolean jj_3R_36() {
-        if (jj_scan_token(77)) return true;
-        return false;
+        return jj_scan_token(77);
     }
 
     private boolean jj_3R_71() {
-        if (jj_3R_14()) return true;
-        return false;
+        return jj_3R_14();
     }
 
     private boolean jj_3R_61() {
-        if (jj_3R_12()) return true;
-        return false;
+        return jj_3R_12();
     }
 
     private boolean jj_3R_62() {
-        if (jj_3R_71()) return true;
-        return false;
+        return jj_3R_71();
     }
 
     private boolean jj_3R_57() {
         if (jj_scan_token(80)) return true;
-        Token xsp;
+        final Token xsp;
         xsp = jj_scanpos;
         if (jj_3R_62()) jj_scanpos = xsp;
-        if (jj_scan_token(81)) return true;
-        return false;
+        return jj_scan_token(81);
     }
 
     private boolean jj_3R_56() {
-        if (jj_3R_61()) return true;
-        return false;
+        return jj_3R_61();
     }
 
     /**
@@ -1742,15 +1665,15 @@ public class LuaParser implements LuaParserConstants {
     /**
      * Constructor with InputStream.
      */
-    public LuaParser(java.io.InputStream stream) {
+    public LuaParser(final java.io.InputStream stream) {
         this(stream, null);
     }
 
     /**
      * Constructor with InputStream and supplied encoding
      */
-    public LuaParser(java.io.InputStream stream, String encoding) {
-        try {jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1);} catch (java.io.UnsupportedEncodingException e) {throw new RuntimeException(e.getMessage());}
+    public LuaParser(final java.io.InputStream stream, final String encoding) {
+        try {jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1);} catch (final java.io.UnsupportedEncodingException e) {throw new RuntimeException(e.getMessage());}
         token_source = new LuaParserTokenManager(jj_input_stream);
         token = new Token();
         jj_ntk = -1;
@@ -1762,15 +1685,15 @@ public class LuaParser implements LuaParserConstants {
     /**
      * Reinitialise.
      */
-    public void ReInit(java.io.InputStream stream) {
+    public void ReInit(final java.io.InputStream stream) {
         ReInit(stream, null);
     }
 
     /**
      * Reinitialise.
      */
-    public void ReInit(java.io.InputStream stream, String encoding) {
-        try {jj_input_stream.ReInit(stream, encoding, 1, 1);} catch (java.io.UnsupportedEncodingException e) {throw new RuntimeException(e.getMessage());}
+    public void ReInit(final java.io.InputStream stream, final String encoding) {
+        try {jj_input_stream.ReInit(stream, encoding, 1, 1);} catch (final java.io.UnsupportedEncodingException e) {throw new RuntimeException(e.getMessage());}
         token_source.ReInit(jj_input_stream);
         token = new Token();
         jj_ntk = -1;
@@ -1782,7 +1705,7 @@ public class LuaParser implements LuaParserConstants {
     /**
      * Constructor.
      */
-    public LuaParser(java.io.Reader stream) {
+    public LuaParser(final java.io.Reader stream) {
         jj_input_stream = new SimpleCharStream(stream, 1, 1);
         token_source = new LuaParserTokenManager(jj_input_stream);
         token = new Token();
@@ -1795,7 +1718,7 @@ public class LuaParser implements LuaParserConstants {
     /**
      * Reinitialise.
      */
-    public void ReInit(java.io.Reader stream) {
+    public void ReInit(final java.io.Reader stream) {
         jj_input_stream.ReInit(stream, 1, 1);
         token_source.ReInit(jj_input_stream);
         token = new Token();
@@ -1808,7 +1731,7 @@ public class LuaParser implements LuaParserConstants {
     /**
      * Constructor with generated Token Manager.
      */
-    public LuaParser(LuaParserTokenManager tm) {
+    public LuaParser(final LuaParserTokenManager tm) {
         token_source = tm;
         token = new Token();
         jj_ntk = -1;
@@ -1820,7 +1743,7 @@ public class LuaParser implements LuaParserConstants {
     /**
      * Reinitialise.
      */
-    public void ReInit(LuaParserTokenManager tm) {
+    public void ReInit(final LuaParserTokenManager tm) {
         token_source = tm;
         token = new Token();
         jj_ntk = -1;
@@ -1829,8 +1752,8 @@ public class LuaParser implements LuaParserConstants {
         for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
     }
 
-    private Token jj_consume_token(int kind) throws ParseException {
-        Token oldToken;
+    private Token jj_consume_token(final int kind) throws ParseException {
+        final Token oldToken;
         if ((oldToken = token).next != null) token = token.next;
         else token = token.next = token_source.getNextToken();
         jj_ntk = -1;
@@ -1857,7 +1780,7 @@ public class LuaParser implements LuaParserConstants {
 
     final private LookaheadSuccess jj_ls = new LookaheadSuccess();
 
-    private boolean jj_scan_token(int kind) {
+    private boolean jj_scan_token(final int kind) {
         if (jj_scanpos == jj_lastpos) {
             jj_la--;
             if (jj_scanpos.next == null) {
@@ -1897,7 +1820,7 @@ public class LuaParser implements LuaParserConstants {
     /**
      * Get the specific Token.
      */
-    final public Token getToken(int index) {
+    final public Token getToken(final int index) {
         Token t = token;
         for (int i = 0; i < index; i++) {
             if (t.next != null) t = t.next;
@@ -1913,24 +1836,22 @@ public class LuaParser implements LuaParserConstants {
             return (jj_ntk = jj_nt.kind);
     }
 
-    private java.util.List jj_expentries = new java.util.ArrayList();
+    private final java.util.List<int[]> jj_expentries = new java.util.ArrayList<>();
     private int[] jj_expentry;
     private int jj_kind = -1;
-    private int[] jj_lasttokens = new int[100];
+    private final int[] jj_lasttokens = new int[100];
     private int jj_endpos;
 
-    private void jj_add_error_token(int kind, int pos) {
+    private void jj_add_error_token(final int kind, final int pos) {
         if (pos >= 100) return;
         if (pos == jj_endpos + 1) {
             jj_lasttokens[jj_endpos++] = kind;
         } else if (jj_endpos != 0) {
             jj_expentry = new int[jj_endpos];
-            for (int i = 0; i < jj_endpos; i++) {
-                jj_expentry[i] = jj_lasttokens[i];
-            }
+            System.arraycopy(jj_lasttokens, 0, jj_expentry, 0, jj_endpos);
             jj_entries_loop:
-            for (java.util.Iterator it = jj_expentries.iterator(); it.hasNext(); ) {
-                int[] oldentry = (int[]) (it.next());
+            for (var it = jj_expentries.iterator(); it.hasNext(); ) {
+                final int[] oldentry = (int[]) (it.next());
                 if (oldentry.length == jj_expentry.length) {
                     for (int i = 0; i < jj_expentry.length; i++) {
                         if (oldentry[i] != jj_expentry[i]) {
@@ -1938,7 +1859,7 @@ public class LuaParser implements LuaParserConstants {
                         }
                     }
                     jj_expentries.add(jj_expentry);
-                    break jj_entries_loop;
+                    break;
                 }
             }
             if (pos != 0) jj_lasttokens[(jj_endpos = pos) - 1] = kind;
@@ -1950,7 +1871,7 @@ public class LuaParser implements LuaParserConstants {
      */
     public ParseException generateParseException() {
         jj_expentries.clear();
-        boolean[] la1tokens = new boolean[95];
+        final boolean[] la1tokens = new boolean[95];
         if (jj_kind >= 0) {
             la1tokens[jj_kind] = true;
             jj_kind = -1;
@@ -1980,7 +1901,7 @@ public class LuaParser implements LuaParserConstants {
         jj_endpos = 0;
         jj_rescan_token();
         jj_add_error_token(0, 0);
-        int[][] exptokseq = new int[jj_expentries.size()][];
+        final int[][] exptokseq = new int[jj_expentries.size()][];
         for (int i = 0; i < jj_expentries.size(); i++) {
             exptokseq[i] = (int[]) jj_expentries.get(i);
         }
@@ -2034,12 +1955,12 @@ public class LuaParser implements LuaParserConstants {
                     }
                     p = p.next;
                 } while (p != null);
-            } catch (LookaheadSuccess ls) {}
+            } catch (final LookaheadSuccess ls) {}
         }
         jj_rescan = false;
     }
 
-    private void jj_save(int index, int xla) {
+    private void jj_save(final int index, final int xla) {
         JJCalls p = jj_2_rtns[index];
         while (p.gen > jj_gen) {
             if (p.next == null) {

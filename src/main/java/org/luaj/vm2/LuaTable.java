@@ -209,6 +209,15 @@ public class LuaTable extends LuaValue implements Metatable {
     }
 
     /**
+     * Get the length of the array part of the table.
+     *
+     * @return length of the array part, does not relate to count of objects in the table.
+     */
+    protected int getArrayLength() {
+        return array.length;
+    }
+
+    /**
      * Get the length of the hash part of the table.
      *
      * @return length of the hash part, does not relate to count of objects in the table.
@@ -879,6 +888,21 @@ public class LuaTable extends LuaValue implements Metatable {
             return cmpfunc.call(a, b).toboolean();
         } else {
             return a.lt_b(b);
+        }
+    }
+
+    /**
+     * This may be deprecated in a future release.
+     * It is recommended to count via iteration over next() instead
+     *
+     * @return count of keys in the table
+     */
+    public int keyCount() {
+        LuaValue k = LuaValue.NIL;
+        for (int i = 0; true; i++) {
+            Varargs n = next(k);
+            if ((k = n.arg1()).isnil())
+                return i;
         }
     }
 
