@@ -82,7 +82,7 @@ public class MathLib extends TwoArgFunction {
      * Pointer to the latest MathLib instance, used only to dispatch
      * math.exp to tha correct platform math library.
      */
-    private static @Nullable MathLib MATHLIB = null;
+    public static @Nullable MathLib MATHLIB = null;
 
     /**
      * Construct a MathLib, which can be initialized by calling it with a
@@ -104,28 +104,28 @@ public class MathLib extends TwoArgFunction {
     @Override
     public LuaValue call(final LuaValue modname, final LuaValue env) {
         final var math = new LuaTable(0, 30);
-        math.set("abs", unaryOp(Math::abs));
-        math.set("ceil", unaryOp(Math::ceil));
-        math.set("cos", unaryOp(Math::cos));
-        math.set("deg", unaryOp(Math::toDegrees));
-        math.set("exp", unaryOp(d -> dpow_lib(Math.E, d)));
-        math.set("floor", unaryOp(Math::floor));
+        math.set("abs", op(Math::abs));
+        math.set("ceil", op(Math::ceil));
+        math.set("cos", op(Math::cos));
+        math.set("deg", op(Math::toDegrees));
+        math.set("exp", op(d -> dpow_lib(Math.E, d)));
+        math.set("floor", op(Math::floor));
         math.set("fmod", LuaExtensions.function(this::fmod));
-        math.set("frexp", LuaExtensions.function(this::frexp));
+        math.set("frexp", LuaExtensions.varArgFunction(this::frexp));
         math.set("huge", LuaDouble.POSINF);
-        math.set("ldexp", binaryOp((x, y) -> x * Double.longBitsToDouble((((long) y) + 1023) << 52)));
-        math.set("max", LuaExtensions.function(this::max));
-        math.set("min", LuaExtensions.function(this::min));
-        math.set("modf", LuaExtensions.function(this::modf));
+        math.set("ldexp", op(this::ldexp));
+        math.set("max", LuaExtensions.varArgFunction(this::max));
+        math.set("min", LuaExtensions.varArgFunction(this::min));
+        math.set("modf", LuaExtensions.varArgFunction(this::modf));
         math.set("pi", Math.PI);
-        math.set("pow", binaryOp(MathLib::dpow_default));
+        math.set("pow", op(MathLib::dpow_default));
         final random r;
         math.set("random", r = new random());
         math.set("randomseed", new randomseed(r));
-        math.set("rad", unaryOp(Math::toRadians));
-        math.set("sin", unaryOp(Math::sin));
-        math.set("sqrt", unaryOp(Math::sqrt));
-        math.set("tan", unaryOp(Math::tan));
+        math.set("rad", op(Math::toRadians));
+        math.set("sin", op(Math::sin));
+        math.set("sqrt", op(Math::sqrt));
+        math.set("tan", op(Math::tan));
         env.set("math", math);
         if (!env.get("package").isnil()) env.get("package").get("loaded").set("math", math);
         return math;
@@ -135,7 +135,7 @@ public class MathLib extends TwoArgFunction {
     public interface UnaryOperator {
         double call(double d);
     }
-    public final LuaFunction unaryOp(final UnaryOperator op) {
+    public final LuaFunction op(final UnaryOperator op) {
         return LuaExtensions.function(arg -> {
             return valueOf(op.call(arg.checkdouble()));
         });
@@ -145,17 +145,22 @@ public class MathLib extends TwoArgFunction {
     public interface BinaryOperator {
         double call(double x, double y);
     }
-    public final LuaFunction binaryOp(final BinaryOperator op) {
+    public final LuaFunction op(final BinaryOperator op) {
         return LuaExtensions.function((argx, argy) -> {
             return valueOf(op.call(argx.checkdouble(), argy.checkdouble()));
         });
     }
 
     private LuaValue fmod(final LuaValue xv, final LuaValue yv) {
-        if (xv.islong() && yv.islong())
+        if (xv.islong() && yv.islong()) {
             return valueOf(xv.tolong() % yv.tolong());
-
+        }
         return valueOf(xv.checkdouble() % yv.checkdouble());
+    }
+
+    private double ldexp(final double x, final double y) {
+        // This is the behavior on os-x, windows differs in rounding behavior.
+        return x * Double.longBitsToDouble((((long) y) + 1023) << 52);
     }
 
     private Varargs frexp(final Varargs args) {

@@ -74,17 +74,17 @@ public final class JseMathLib extends org.luaj.vm2.lib.MathLib {
     public LuaValue call(final LuaValue modname, final LuaValue env) {
         super.call(modname, env);
         final var math = env.get("math");
-        math.set("acos", unaryOp(Math::acos));
-        math.set("asin", unaryOp(Math::asin));
-        final LuaValue atan = binaryOp(Math::atan2);
+        math.set("acos", op(Math::acos));
+        math.set("asin", op(Math::asin));
+        final LuaValue atan = op(Math::atan2);
         math.set("atan", atan);
         math.set("atan2", atan);
-        math.set("cosh", unaryOp(Math::cosh));
-        math.set("exp", unaryOp(Math::exp));
+        math.set("cosh", op(Math::cosh));
+        math.set("exp", op(Math::exp));
         math.set("log", LuaExtensions.function(this::log));
-        math.set("pow", binaryOp(Math::pow));
-        math.set("sinh", unaryOp(Math::sinh));
-        math.set("tanh", unaryOp(Math::tanh));
+        math.set("pow", op(Math::pow));
+        math.set("sinh", op(Math::sinh));
+        math.set("tanh", op(Math::tanh));
         return math;
     }
 
