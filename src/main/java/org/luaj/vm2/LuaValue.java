@@ -21,6 +21,8 @@
  ******************************************************************************/
 package org.luaj.vm2;
 
+import java.util.Arrays;
+
 /**
  * Base class for all concrete lua type values.
  * <p>
@@ -340,8 +342,7 @@ public class LuaValue extends Varargs {
     public static final LuaValue[] NILS = new LuaValue[MAXSTACK];
 
     static {
-        for (int i = 0; i < MAXSTACK; i++)
-            NILS[i] = NIL;
+        Arrays.fill(NILS, NIL);
     }
 
     // type

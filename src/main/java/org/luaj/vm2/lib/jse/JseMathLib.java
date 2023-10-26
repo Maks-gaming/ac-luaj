@@ -22,9 +22,9 @@
 package org.luaj.vm2.lib.jse;
 
 import org.luaj.vm2.Globals;
+import org.luaj.vm2.LuaExtensions;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.LibFunction;
-import org.luaj.vm2.lib.TwoArgFunction;
 
 /**
  * Subclass of {@link LibFunction} which implements the lua standard {@code math}
@@ -56,15 +56,10 @@ import org.luaj.vm2.lib.TwoArgFunction;
  *
  * @see LibFunction
  * @see org.luaj.vm2.lib.jse.JsePlatform
- * @see org.luaj.vm2.lib.jme.JmePlatform
  * @see org.luaj.vm2.lib.jse.JseMathLib
  * @see <a href="http://www.lua.org/manual/5.2/manual.html#6.6">Lua 5.2 Math Lib Reference</a>
  */
-public class JseMathLib extends org.luaj.vm2.lib.MathLib {
-
-    public JseMathLib() {}
-
-
+public final class JseMathLib extends org.luaj.vm2.lib.MathLib {
     /**
      * Perform one-time initialization on the library by creating a table
      * containing the library functions, adding that table to the supplied environment,
@@ -75,73 +70,37 @@ public class JseMathLib extends org.luaj.vm2.lib.MathLib {
      * @param modname the module name supplied if this is loaded via 'require'.
      * @param env     the environment to load into, which must be a Globals instance.
      */
-    public LuaValue call(LuaValue modname, LuaValue env) {
+    @Override
+    public LuaValue call(final LuaValue modname, final LuaValue env) {
         super.call(modname, env);
-        LuaValue math = env.get("math");
-        math.set("acos", new acos());
-        math.set("asin", new asin());
-        LuaValue atan = new atan2();
+        final var math = env.get("math");
+        math.set("acos", unaryOp(Math::acos));
+        math.set("asin", unaryOp(Math::asin));
+        final LuaValue atan = binaryOp(Math::atan2);
         math.set("atan", atan);
         math.set("atan2", atan);
-        math.set("cosh", new cosh());
-        math.set("exp", new exp());
-        math.set("log", new log());
-        math.set("pow", new pow());
-        math.set("sinh", new sinh());
-        math.set("tanh", new tanh());
+        math.set("cosh", unaryOp(Math::cosh));
+        math.set("exp", unaryOp(Math::exp));
+        math.set("log", LuaExtensions.function(this::log));
+        math.set("pow", binaryOp(Math::pow));
+        math.set("sinh", unaryOp(Math::sinh));
+        math.set("tanh", unaryOp(Math::tanh));
         return math;
     }
 
-    static final class acos extends UnaryOp {
-        protected double call(double d) {return Math.acos(d);}
-    }
-
-    static final class asin extends UnaryOp {
-        protected double call(double d) {return Math.asin(d);}
-    }
-
-    static final class atan2 extends TwoArgFunction {
-        public LuaValue call(LuaValue x, LuaValue y) {
-            return valueOf(Math.atan2(x.checkdouble(), y.optdouble(1)));
-        }
-    }
-
-    static final class cosh extends UnaryOp {
-        protected double call(double d) {return Math.cosh(d);}
-    }
-
-    static final class exp extends UnaryOp {
-        protected double call(double d) {return Math.exp(d);}
-    }
-
-    static final class log extends TwoArgFunction {
-        public LuaValue call(LuaValue x, LuaValue base) {
-            double nat = Math.log(x.checkdouble());
-            double b = base.optdouble(Math.E);
-            if (b != Math.E) nat /= Math.log(b);
-            return valueOf(nat);
-        }
-    }
-
-    static final class pow extends BinaryOp {
-        protected double call(double x, double y) {return Math.pow(x, y);}
-    }
-
-    static final class sinh extends UnaryOp {
-        protected double call(double d) {return Math.sinh(d);}
-    }
-
-    static final class tanh extends UnaryOp {
-        protected double call(double d) {return Math.tanh(d);}
+    private LuaValue log(final LuaValue x, final LuaValue base) {
+        var nat = Math.log(x.checkdouble());
+        final var b = base.optdouble(Math.E);
+        if (b != Math.E) nat /= Math.log(b);
+        return valueOf(nat);
     }
 
     /**
      * Faster, better version of pow() used by arithmetic operator ^
      */
-    public double dpow_lib(double a, double b) {
+    @Override
+    public double dpow_lib(final double a, final double b) {
         return Math.pow(a, b);
     }
-
-
 }
 

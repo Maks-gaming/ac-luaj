@@ -20,3 +20,8 @@ classes/
 .vscode/launch.json
 
 !org.eclipse.jdt.core.prefs
+
+abc.txt
+seektest.txt
+tmp1.out
+tmp2.out
